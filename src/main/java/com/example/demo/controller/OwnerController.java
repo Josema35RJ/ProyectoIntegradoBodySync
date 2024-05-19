@@ -1,0 +1,373 @@
+package com.example.demo.controller;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.demo.converter.GymUserToDataFrameConverter;
+import com.example.demo.entity.ClassFeedback;
+import com.example.demo.entity.GymClass;
+import com.example.demo.entity.GymUser;
+import com.example.demo.model.GymUserModel;
+import com.example.demo.repository.GymUserRepository;
+import com.example.demo.service.ClassFeedbackService;
+import com.example.demo.service.GymClassService;
+import com.example.demo.service.GymUserService;
+import com.example.demo.service.InstructorService;
+import com.example.demo.service.impl.ChurnPredictionService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import smile.data.DataFrame;
+
+@Controller
+public class OwnerController {
+
+	private static final String OWNERPANEL_VIEW = "/auth/GymOwner/OwnerPanel";
+	private static final String GESTIONMIEMBROS_VIEW = "/auth/GymOwner/GestionMiembros";
+	private static final String ADDMIEMBROS_VIEW = "/auth/GymOwner/addMiembros";
+	private static final String VIEWACHIEVEMNET_VIEW = "/auth/GymOwner/viewAchievement";
+	private static final String GESTIONCLASES_VIEW = "/auth/GymOwner/GestionClases";
+	private static final String GESTIONINSTRUCTORES_VIEW = "/auth/GymOwner/GestionInstructores";
+	private static final String CONFIGURACIONGYM_VIEW = "/auth/GymOwner/ConfiguracionGym";
+
+	@Autowired
+	@Qualifier("gymUserService")
+	private GymUserService gymUserService;
+
+	@Autowired
+	@Qualifier("gymUserRepository")
+	private GymUserRepository gymUserRepository;
+
+	@Autowired
+	@Qualifier("gymClassService")
+	private GymClassService gymClassService;
+
+	@Autowired
+	@Qualifier("classFeedbackService")
+	private ClassFeedbackService classFeedbackService;
+
+	@Autowired
+	@Qualifier("instructorService")
+	private InstructorService instructorService;
+
+	@Autowired
+	@Qualifier("churnPredictionService")
+	private ChurnPredictionService churnPredictionService;
+
+	@Autowired
+	@Qualifier("gymUserToDataFrameConverter")
+	private GymUserToDataFrameConverter gymUserToDataFrameConverter;
+
+	@GetMapping("/auth/gymOwner/ownerPanel")
+	public String OwnerPanel() {
+
+		return OWNERPANEL_VIEW;
+	}
+
+	@PostMapping("/auth/gymOwner/addClass")
+	public String addClass(@ModelAttribute GymClass gymClass, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+		gymClassService.addClass(gymClass);
+		redirectAttributes.addFlashAttribute("message", "Clase creada con éxito");
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	
+
+	@PostMapping("/auth/gymOwner/updateClass/{id}")
+	public String editClass(@PathVariable int id, @ModelAttribute GymClass updatedClass, BindingResult result,
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+ 
+		GymClass existingClass = gymClassService.getClassById(id);
+		if (existingClass != null) {
+			existingClass.setName(updatedClass.getName());
+			existingClass.setDescription(updatedClass.getDescription());
+			existingClass.setStartDate(updatedClass.getStartDate());
+			existingClass.setEndDate(updatedClass.getEndDate());
+			existingClass.setDaysOfWeek(updatedClass.getDaysOfWeek());
+			existingClass.setTime(updatedClass.getTime());
+			existingClass.setDuration(updatedClass.getDuration());
+			existingClass.setMaximumCapacity(updatedClass.getMaximumCapacity());
+			existingClass.setInstructor(existingClass.getInstructor());
+
+			gymClassService.updateClass(existingClass);
+			redirectAttributes.addFlashAttribute("success", "Clase actualizada con éxito");
+		} else {
+			redirectAttributes.addFlashAttribute("error", "Clase no encontrada");
+		}
+		String referer = request.getHeader("Referer");	
+		return "redirect:" + referer;
+	}
+
+	@GetMapping("/auth/gymOwner/activateClass/{id}")
+	public String activateClass(@PathVariable int id, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+		GymClass gymClass = gymClassService.getClassById(id);
+		if (gymClass != null) {
+			gymClass.setActive(true);
+			gymClassService.updateClass(gymClass);
+			redirectAttributes.addFlashAttribute("success", "Clase activada con éxito");
+		} else {
+			redirectAttributes.addFlashAttribute("error", "Clase no encontrada");
+		}
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@GetMapping("/auth/gymOwner/deactivateClass/{id}")
+	public String deactivateClass(@PathVariable int id, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+		GymClass gymClass = gymClassService.getClassById(id);
+		if (gymClass != null) {
+			gymClass.setActive(false);
+			gymClassService.updateClass(gymClass);
+			redirectAttributes.addFlashAttribute("success", "Clase desactivada con éxito");
+		} else {
+			redirectAttributes.addFlashAttribute("error", "Clase no encontrada");
+		}
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@GetMapping("/auth/gymOwner/getClassDetails/{id}")
+	@ResponseBody
+	public GymClass getClassDetails(@PathVariable int id) {
+		GymClass gymClass = gymClassService.getClassById(id);
+		return gymClass;
+	}
+
+	@GetMapping("/auth/gymOwner/GestionMiembros")
+	public String GestionMiembros(Model model) {
+		List<GymUserModel> members = gymUserService.ListAllGymUsers();
+
+		// Filtra los miembros activos e inactivos
+		List<GymUserModel> activeMembers = members.stream()
+				.filter(gymUser -> gymUser.isEnabled() && !gymUser.isDeleted()).collect(Collectors.toList());
+		List<GymUserModel> inactiveMembers = members.stream()
+				.filter(gymUser -> !gymUser.isEnabled() && !gymUser.isDeleted()).collect(Collectors.toList());
+
+		// Calcula la edad y el IMC para cada miembro
+		List<Integer> ages = members.stream().map(GymUserModel::getBirthDate).map(gymUserService::calculateAge)
+				.collect(Collectors.toList());
+		List<Float> bmis = members.stream().map(gymUserService::calculateBMI).collect(Collectors.toList());
+
+		// Predice el riesgo de abandono para cada miembro
+		for (GymUserModel gymUser : members) {
+			DataFrame data = gymUserToDataFrameConverter.convert(Collections.singletonList(gymUser));
+			boolean churnRisk = churnPredictionService.predict(data);
+			gymUser.setChurn(churnRisk);
+		}
+
+		List<LocalDateTime> createdDates = members.stream().map(GymUserModel::getCreatedDate) // Asegúrate de que
+																								// getCreatedDate es un
+																								// método de
+																								// GymUserModel
+				.collect(Collectors.toList());
+
+		// Añade los miembros activos e inactivos, las edades, los IMCs y los días desde
+		// la creación al modelo
+		model.addAttribute("activeMembers", activeMembers);
+		model.addAttribute("inactiveMembers", inactiveMembers);
+		model.addAttribute("ages", ages);
+		model.addAttribute("bmis", bmis);
+		model.addAttribute("daysSinceCreation", createdDates);
+
+		return GESTIONMIEMBROS_VIEW;
+	}
+
+	@GetMapping("/auth/gymUsers/membershipStats")
+	public ResponseEntity<Map<String, Integer>> getMembershipStats() {
+		Map<String, Integer> stats = new HashMap<>();
+		// Aquí debes rellenar el mapa 'stats' con los datos que necesitas.
+		// Por ejemplo, podrías contar el número de miembros activos e inactivos.
+		stats.put("active", gymUserRepository.countByEnabled(true));
+		stats.put("inactive", gymUserRepository.countByEnabled(false));
+		return ResponseEntity.ok(stats);
+	}
+
+	@GetMapping("/auth/gymUsers/attendanceStats")
+	public ResponseEntity<Map<String, Integer>> getAttendanceStats() {
+		Map<String, Integer> stats = new HashMap<>();
+		// Aquí debes rellenar el mapa 'stats' con los datos que necesitas.
+		// Por ejemplo, podrías contar la asistencia de los miembros por día de la
+		// semana.
+		for (String day : new String[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }) {
+			stats.put(day, gymUserRepository.countByAttendanceDaysContains(day));
+		}
+		return ResponseEntity.ok(stats);
+	}
+
+	@PostMapping("/gymUser/activateDeactivate/{id}")
+	public String activateDeactivateGymUser(@PathVariable("id") int id) {
+		boolean result = gymUserService.activarDesactivar(id);
+		if (result) {
+			return "redirect:/auth/gymOwner/GestionMiembros?success";
+		} else {
+			return "redirect:/auth/gymOwner/GestionMiembros?error";
+		}
+	}
+
+	@PostMapping("/gymUser/delete/{id}")
+	public String deleteGymUser(@PathVariable("id") int id, RedirectAttributes flash) {
+		if (gymUserService.eliminarGymUser(id)) {
+			flash.addFlashAttribute("message", "Usuario eliminado con éxito");
+		} else {
+			flash.addFlashAttribute("error", "No se pudo eliminar el usuario");
+		}
+		return GESTIONMIEMBROS_VIEW;
+	}
+
+	@GetMapping("/gymUser/viewAchievements/{id}")
+	public String viewAchievementsGymUser(@PathVariable("id") int id, Model model) {
+		GymUser gymUser = gymUserRepository.findById(id);
+		model.addAttribute("achievements", gymUser.getAchievements());
+		return VIEWACHIEVEMNET_VIEW;
+	}
+
+	@GetMapping("/auth/gymOwner/viewFeedback/{classId}")
+	public String viewFeedback(@PathVariable int classId, Model model) {
+		List<ClassFeedback> feedbacks = classFeedbackService.getFeedbackByGymClassId(classId);
+		model.addAttribute("feedbacks", feedbacks);
+		return "viewFeedback";
+	}
+
+	@PostMapping("/auth/gymOwner/addFeedback")
+	public String addFeedback(@ModelAttribute ClassFeedback feedback) {
+		classFeedbackService.addFeedback(feedback);
+		return "redirect:/auth/gymOwner/GestionClases";
+	}
+
+	@GetMapping("/auth/gymOwner/addMember")
+	public String showAddGymUserForm(Model model) {
+		model.addAttribute("gymUser", new GymUser());
+		return ADDMIEMBROS_VIEW;
+	}
+
+	@PostMapping("/auth/gymOwner/addMember")
+	public String addGymUser(@ModelAttribute GymUser gymUser) {
+		gymUserRepository.save(gymUser);
+		return ADDMIEMBROS_VIEW;
+	}
+
+	@GetMapping("/auth/gymOwner/GestionClases")
+	public String GestionClases(Model model) {
+		model.addAttribute("gymClasses", gymClassService.getAllClasses());
+		model.addAttribute("instructors", gymUserService.ListAllGymUsersInstructores());
+		return GESTIONCLASES_VIEW;
+	}
+
+	@GetMapping("/auth/gymOwner/GestionInstructores")
+	public String GestionInstructores(Model model) {
+
+		model.addAttribute("ListInstructores", instructorService.getAllInstructors());
+		return GESTIONINSTRUCTORES_VIEW;
+	}
+	
+	
+
+	@GetMapping("/auth/gymOwner/ConfiguracionGym")
+	public String ConfiguracionGym() {
+
+		return CONFIGURACIONGYM_VIEW;
+	}
+	
+
+	@GetMapping("/auth/gymOwner/instructors")
+	 @ResponseBody
+    public List<GymUser> getAllInstructors() {
+		System.out.println("HOLAAAAAAAAAAAAAAAAA " + instructorService.getAllInstructors());
+        return instructorService.getAllInstructors();
+    }
+
+	@GetMapping("/auth/gymOwner/asistencia")
+	public List<GymClass> obtenerDatosAsistencia() {
+		// Utiliza el servicio para obtener las clases en curso y mapearlas a un modelo
+		return gymClassService.obtenerDatosAsistencia().stream()
+
+				.collect(Collectors.toList());
+	}
+
+	@GetMapping("/auth/gymOwner/popularidad")
+	public List<GymClass> obtenerDatosPopularidad() {
+		// Utiliza el servicio para obtener las clases ordenadas por popularidad y
+		// mapearlas a un modelo
+		return gymClassService.obtenerDatosPopularidad().stream()
+
+				.collect(Collectors.toList());
+	}
+
+
+	@PostMapping("/auth/gymOwner/instructors/edit")
+	public String editInstructor(@ModelAttribute GymUserModel instructor) {
+	
+		gymUserService.updateUser(instructor);
+		
+		return "redirect:" + GESTIONINSTRUCTORES_VIEW;
+	}
+	
+	@PostMapping("/auth/gymOwner/register")
+	public String registerSubmit(@ModelAttribute("gymUserModel") GymUserModel gymUserModel,
+			@RequestParam("confirmPassword") String confirmPassword, BindingResult result, RedirectAttributes flash, HttpServletRequest request) {
+
+		if (result.hasErrors()) {
+			return GESTIONINSTRUCTORES_VIEW;
+		}
+
+		gymUserModel.setUsername(gymUserModel.getUsername().toLowerCase());
+
+		if (gymUserModel.getFirstName().length() > 45) {
+			flash.addFlashAttribute("error", "¡El nombre excede los 100 caracteres!");
+			return GESTIONINSTRUCTORES_VIEW;
+		} else if (gymUserService.existeUsername(gymUserModel.getUsername())) {
+			flash.addFlashAttribute("error",
+					"Este correo electrónico ya está registrado. ¿Has olvidado tu contraseña? Puedes restablecerla aquí. O intenta registrarte con una dirección de correo electrónico diferente.");
+			return GESTIONINSTRUCTORES_VIEW;
+		} else if (gymUserModel.getLastName().length() > 100) {
+			flash.addFlashAttribute("error", "¡Los apellidos exceden los 100 caracteres!");
+			return GESTIONINSTRUCTORES_VIEW;
+		} else if (gymUserService.existeUsername(gymUserModel.getUsername())) {
+			flash.addFlashAttribute("error", "¡El correo electrónico ya está registrado!");
+			return GESTIONINSTRUCTORES_VIEW;
+		} else if (!isValidEmailAddress(gymUserModel.getUsername())) {
+			flash.addFlashAttribute("error", "¡El correo electrónico no tiene un formato válido!");
+			return "redirect:/auth/register";
+		} else if (!gymUserModel.getPassword().equals(confirmPassword)) {
+			flash.addFlashAttribute("error", "¡Las contraseñas no coinciden!");
+			return GESTIONINSTRUCTORES_VIEW;
+		} else if (gymUserModel.getPassword().length() < 6 || gymUserModel.getPassword().length() > 18) {
+			flash.addFlashAttribute("error", "¡La contraseña debe tener entre 6 y 18 caracteres!");
+			return GESTIONINSTRUCTORES_VIEW;
+		} else {
+			gymUserService.registrar(gymUserModel);
+			flash.addFlashAttribute("success", "¡GymUser registrado exitosamente!");
+			String referer = request.getHeader("Referer");
+			
+			return "redirect:" + referer;
+		}
+	}
+	
+	private boolean isValidEmailAddress(String email) {
+		// Expresión regular para verificar el formato de un correo electrónico
+		String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
+		return email.matches(regex);
+	}
+
+}

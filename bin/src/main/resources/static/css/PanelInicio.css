@@ -1,0 +1,37 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+	background-color: #f4f4f4;
+	padding-top: 80px; /* Ajuste para la barra de navegación fija */
+}
+
+.navbar {
+	background-color: #007bff; /* Azul principal */
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1030;
+}
+
+.navbar-brand, .nav-link {
+	color: #fff !important;
+}
+
+.nav-link:hover {
+	background-color: #0056b3; /* Azul más oscuro para el hover */
+	border-radius: 5px;
+}
+
+.card-header {
+	background-color: #007bff;
+	/* Azul para los encabezados de las tarjetas */
+	color: #fff;
+}
+
+.container {
+	margin-top: 80px;
+	/* Ajuste para el contenido debajo de la barra de navegación fija */
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+}

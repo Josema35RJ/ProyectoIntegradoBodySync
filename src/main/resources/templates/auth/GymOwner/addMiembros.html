@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Añadir GymUser (Miembro)</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<link rel="stylesheet" href="/css/register.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
+</head>
+<body>
+	<nav
+		class="navbar navbar-expand-lg navbar-dark bg-primary animate__animated animate__fadeInDown">
+		<div class="container">
+			<a class="navbar-brand" href="#">BodySync</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarNav" aria-controls="navbarNav"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active"><a class="nav-link" href="#">Inicio</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="#">Características</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="#">Precios</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container d-flex align-items-center justify-content-center"
+		style="height: calc(100vh - 120px);">
+		<div
+			class="row justify-content-center animate__animated animate__fadeInUp">
+			<div class="col-md-6">
+				<div class="card mt-5 mx-auto">
+					<div class="card-header text-center">
+						<h2>Bienvenido a BodySync</h2>
+					</div>
+					<div class="card-body">
+						<form id="registerForm" th:action="@{/auth/register}"
+							method="post">
+							<div class="form-group">
+								<label for="firstName">Nombre:</label> <input type="text"
+									id="firstName" name="firstName" class="form-control" required
+									autocomplete="given-name" placeholder="Introduce tu nombre">
+							</div>
+							<div class="form-group">
+								<label for="lastName">Apellidos:</label> <input type="text"
+									id="lastName" name="lastName" class="form-control" required
+									autocomplete="family-name"
+									placeholder="Introduce tus apellidos">
+							</div>
+							<div class="form-group">
+								<label for="email">Correo electrónico:</label> <input
+									type="email" id="username" name="username" class="form-control"
+									required autocomplete="email"
+									placeholder="Introduce un correo electrónico válido">
+							</div>
+							<div class="form-group">
+								<label for="password">Contraseña:</label> <input type="password"
+									id="password" name="password" class="form-control" required
+									autocomplete="new-password"
+									placeholder="Introduce una contraseña segura">
+							</div>
+							<div class="form-group">
+								<label for="confirmPassword">Confirmar contraseña:</label> <input
+									type="password" id="confirmPassword" name="confirmPassword"
+									class="form-control" required autocomplete="new-password"
+									placeholder="Confirma tu contraseña">
+							</div>
+							<div class="form-group">
+								<label for="dni">DNI:</label> <input type="text" id="dni"
+									name="dni" class="form-control" required
+									autocomplete="additional-name" placeholder="Introduce tu DNI">
+							</div>
+							<div class="form-group">
+								<label for="postalCode">Código postal:</label> <input
+									type="text" id="postalCode" name="postalCode"
+									class="form-control" required autocomplete="postal-code"
+									placeholder="Introduce tu código postal">
+							</div>
+							<div class="form-group">
+								<label for="province">Provincia:</label> <select id="province"
+									name="province" class="form-control" required>
+									<option value="">Selecciona tu provincia</option>
+									<option value="Madrid">Madrid</option>
+									<option value="Barcelona">Barcelona</option>
+									<option value="Valencia">Valencia</option>
+									<option value="Sevilla">Sevilla</option>
+									<!-- Mas adelante lo haremos mediante api, para rellenar con las demas-->
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="city">Ciudad:</label> <select id="city" name="city"
+									class="form-control" required>
+									<option value="">Selecciona tu ciudad</option>
+									<option value="Madrid">Madrid</option>
+									<option value="Barcelona">Barcelona</option>
+									<option value="Valencia">Valencia</option>
+									<option value="Sevilla">Sevilla</option>
+									<!-- Mas adelante lo haremos mediante api, para rellenar con las demas-->
+								</select>
+							</div>
+							<div id="gymUserFields" style="display: block;">
+								<div class="form-group">
+									<label for="birthDate">Fecha de nacimiento:</label> <input
+										type="date" id="birthDate" name="birthDate"
+										class="form-control" autocomplete="bday"
+										placeholder="Introduce tu fecha de nacimiento">
+								</div>
+								<div class="form-group">
+									<label for="weight">Peso:</label> <input type="number"
+										id="weight" name="weight" class="form-control"
+										autocomplete="off" placeholder="Introduce tu peso">
+								</div>
+								<div class="form-group">
+									<label for="height">Altura:</label> <input type="number"
+										id="height" name="height" class="form-control"
+										autocomplete="off" placeholder="Introduce tu altura">
+								</div>
+								<div class="form-group">
+									<label for="role">Rol:</label> <select id="role" name="role"
+										class="form-control">
+										<option value="GymUser">Usuario del gimnasio</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="activityLevel">Nivel de actividad:</label> <select
+										id="activityLevel" name="activityLevel" class="form-control">
+										<option value="Low">Bajo</option>
+										<option value="Moderate">Moderado</option>
+										<option value="High">Alto</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="goal">Objetivo de fitness:</label> <select
+										id="goal" name="goal" class="form-control">
+										<option value="Lose Weight">Perder peso</option>
+										<option value="Build Muscle">Ganar músculo</option>
+										<option value="Improve Endurance">Mejorar resistencia</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary btn-block">Añadir
+									Miembro</button>
+							</div>
+							 <a href="javascript:history.back()">Volver</a>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer
+		class="footer bg-dark text-white mt-5 p-4 text-center animate__animated animate__fadeInUp">
+		© 2024 BodySync. Todos los derechos reservados. </footer>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="/js/register.js"></script>
+</body>
+</html>

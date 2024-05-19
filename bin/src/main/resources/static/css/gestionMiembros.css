@@ -1,0 +1,184 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+	background-color: #f4f4f4;
+	padding-top: 80px; /* Ajuste para la barra de navegación fija */
+}
+
+.navbar {
+	background-color: #007bff; /* Azul principal */
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1030;
+}
+
+.navbar-brand, .nav-link {
+	color: #fff !important;
+}
+
+.nav-link:hover {
+	background-color: #0056b3; /* Azul más oscuro para el hover */
+	border-radius: 5px;
+}
+
+.card-header {
+	background-color: #007bff; /* Azul para los encabezados de las tarjetas */
+	color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.card-header .status {
+	padding: 0.25em 0.5em;
+	border-radius: 0.25em;
+	color: #fff;
+	font-weight: bold;
+}
+
+.card-header .active {
+	background-color: #28a745; /* Verde para clases activas */
+}
+
+.card-header .upcoming {
+	background-color: #ffc107; /* Amarillo para clases próximas */
+}
+
+.card-header .finished {
+	background-color: #dc3545; /* Rojo para clases finalizadas */
+}
+
+.container {
+	margin-top: 20px; /* Reducido de 80px a 20px */
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+}
+
+.class-card {
+	transition: transform 0.3s ease;
+}
+
+.class-card:hover {
+	transform: scale(1.05);
+}
+
+.active-class {
+	border-left: 5px solid #28a745; /* Indicador para clases activas */
+}
+
+.upcoming-class {
+	border-left: 5px solid #ffc107; /* Indicador para clases próximas */
+}
+
+.finished-class {
+	border-left: 5px solid #dc3545; /* Indicador para clases finalizadas */
+}
+
+.charts-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	justify-content: center;
+}
+
+.chart {
+	flex: 1;
+	min-width: 300px; /* Ajusta este valor según tus necesidades */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	overflow: hidden;
+	transition: transform 0.3s ease;
+}
+
+.chart h2 {
+	text-align: center;
+	padding: 15px;
+	background-color: #f8f9fa;
+	margin: 0;
+}
+
+.chart canvas {
+	display: block; /* Elimina el espacio extra debajo del canvas */
+}
+
+.chart:hover {
+	transform: translateY(-5px);
+}
+
+/* Estilos adicionales para mejorar la apariencia de las tarjetas */
+.card-body {
+	position: relative;
+	padding: 1rem;
+}
+
+.card-body::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 5px;
+	bottom: 0;
+	transition: background-color 0.3s ease;
+}
+
+.card-body.active::before {
+	background-color: #28a745; /* Verde para clases activas */
+}
+
+.card-body.upcoming::before {
+	background-color: #ffc107; /* Amarillo para clases próximas */
+}
+
+.card-body.finished::before {
+	background-color: #dc3545; /* Rojo para clases finalizadas */
+}
+
+/* Reducir el margen superior del contenedor de filtros */
+.container.my-4 {
+	margin-top: 0; /* Ajusta este valor según tus necesidades */
+}
+
+/* Ajustar el padding superior del cuerpo principal para reducir el espacio */
+.container.mt-4 {
+	padding-top: 20px; /* Reduce el padding para disminuir el espacio */
+}
+
+/* Si es necesario, ajusta también el margen inferior de la barra de navegación */
+.navbar {
+	margin-bottom: 0; /* Elimina el margen para acercar los elementos */
+}
+
+/* Estilos para las pestañas */
+.nav-tabs .nav-link {
+    border: 1px solid transparent; /* Añade un borde transparente por defecto */
+    border-radius: 0.25rem;
+    background-color: #f8f9fa; /* Color de fondo claro para las pestañas inactivas */
+}
+
+.nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: #007bff; /* Color de fondo azul para la pestaña activa */
+    border-color: #007bff; /* Borde azul para la pestaña activa */
+}
+
+/* Estilos para las tarjetas según la suscripción */
+.card.member-card {
+    border-left: 5px solid; /* Borde izquierdo para indicar el tipo de suscripción */
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1); /* Sombra suave para resaltar las tarjetas */
+}
+
+/* Colores de borde según el tipo de suscripción */
+.card.member-card.standard {
+    border-color: #6c757d; /* Gris para suscripción estándar */
+}
+
+.card.member-card.premium {
+    border-color: #ffc107; /* Amarillo para suscripción premium */
+}
+
+.card.member-card.vip {
+    border-color: #28a745; /* Verde para suscripción VIP */
+}

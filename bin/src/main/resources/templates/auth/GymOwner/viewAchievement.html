@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Logros del Miembro - Propietario del Gimnasio</title>
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/gestionMiembros.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="#">Panel de Administración de
+			BodySync</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarNav" aria-controls="navbarNav"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item active"><a class="nav-link"
+					href="/auth/gymOwner/ownerPanel">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/auth/gymOwner/GestionMiembros">Gestión de Miembros</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/auth/gymOwner/GestionClases">Gestión de Clases</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/auth/gymOwner/GestionInstructores">Gestión de
+						Instructores</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/auth/gymOwner/ConfiguracionGym">Configuración del
+						Gimnasio</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container mt-5">
+		<h1>Logros del Miembro</h1>
+		<p>Aquí puedes ver todos los logros que ha alcanzado este miembro.</p>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Logro</th>
+					<th>Fecha</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="achievement : ${achievements}">
+					<td th:text="${achievement.description}"></td>
+					<td th:text="${#dates.format(achievement.dateAchieved, 'dd/MM/yyyy')}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="/auth/gymOwner/GestionMiembros" class="btn btn-primary">Volver a la Gestión de Miembros</a>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="/js/GestionMiembros.js"></script>
+</body>
+</html>

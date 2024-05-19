@@ -1,0 +1,29 @@
+<nav th:fragment="navbar">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">BodySync Admin Panel</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item active"><a class="nav-link"
+						href="/auth/gymOwner/ownerPanel">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymOwner/GestionMiembros"><i class="fas fa-users"></i>
+							Gestión de Miembros</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymOwner/GestionClases"><i class="fas fa-dumbbell"></i>
+							Gestión de Clases</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymOwner/GestionInstructores"><i
+							class="fas fa-chalkboard-teacher"></i> Gestión de Instructores</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymOwner/ConfiguracionGym"><i class="fas fa-cogs"></i>
+							Configuración del Gimnasio</a></li>
+				</ul>
+			</div>
+		</div>
+</nav>
