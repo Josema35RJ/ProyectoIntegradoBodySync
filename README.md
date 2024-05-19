@@ -1,23 +1,24 @@
 admin:
 
-admin@gmail.com
+josemanuel@gmail.com | Josema35RJ.
 
-empresas:
+instructores
 
-jose@gmail.com
+maria@gmail.com | Maria21RJ.
 
-salesianos@gmail.com
+josefina@gmail.com | Josefina22.
+
+lucia@gmail.com | Lucia21.
+
+pepa@gmail.com | Pepa21.
 
 alumnos:
 
-felix@gmail.com
+hugo@gmail.com | Hugo21.
 
-raul@gmail.com
+ivan@gmail.com | Ivan21.
 
-rafa@gmail.com (Desactivado)
+mario@gmail.com | Mario21.
 
-francisco@gmail.com (Eliminado)
+juanma@gmail.com | Juanma 21.
 
-password en todos:
-
-123123
