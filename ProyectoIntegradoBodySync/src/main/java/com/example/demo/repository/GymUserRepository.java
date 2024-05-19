@@ -23,6 +23,7 @@ public interface GymUserRepository extends JpaRepository<GymUser, Serializable> 
 
 	Integer countByAttendanceDaysContains(String day);
 
-	Integer countByEnabled(boolean b);
+	Integer countByEnabledAndRole(boolean b, String role);
+
 
 }

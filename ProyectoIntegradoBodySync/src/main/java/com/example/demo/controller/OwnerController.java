@@ -34,6 +34,7 @@ import com.example.demo.service.InstructorService;
 import com.example.demo.service.impl.ChurnPredictionService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import smile.data.DataFrame;
 
 @Controller
@@ -198,8 +199,8 @@ public class OwnerController {
 		Map<String, Integer> stats = new HashMap<>();
 		// Aquí debes rellenar el mapa 'stats' con los datos que necesitas.
 		// Por ejemplo, podrías contar el número de miembros activos e inactivos.
-		stats.put("active", gymUserRepository.countByEnabled(true));
-		stats.put("inactive", gymUserRepository.countByEnabled(false));
+		stats.put("active", gymUserRepository.countByEnabledAndRole(true, "ROL_GYMUSER"));
+		stats.put("inactive", gymUserRepository.countByEnabledAndRole(false, "ROL_GYMUSER"));
 		return ResponseEntity.ok(stats);
 	}
 
@@ -215,15 +216,7 @@ public class OwnerController {
 		return ResponseEntity.ok(stats);
 	}
 
-	@PostMapping("/gymUser/activateDeactivate/{id}")
-	public String activateDeactivateGymUser(@PathVariable("id") int id) {
-		boolean result = gymUserService.activarDesactivar(id);
-		if (result) {
-			return "redirect:/auth/gymOwner/GestionMiembros?success";
-		} else {
-			return "redirect:/auth/gymOwner/GestionMiembros?error";
-		}
-	}
+	
 
 	@PostMapping("/gymUser/delete/{id}")
 	public String deleteGymUser(@PathVariable("id") int id, RedirectAttributes flash) {
@@ -281,38 +274,30 @@ public class OwnerController {
 		return GESTIONINSTRUCTORES_VIEW;
 	}
 	
-	
 
 	@GetMapping("/auth/gymOwner/ConfiguracionGym")
 	public String ConfiguracionGym() {
-
-		return CONFIGURACIONGYM_VIEW;
+	return CONFIGURACIONGYM_VIEW;
 	}
-	
 
 	@GetMapping("/auth/gymOwner/instructors")
 	 @ResponseBody
     public List<GymUser> getAllInstructors() {
-		System.out.println("HOLAAAAAAAAAAAAAAAAA " + instructorService.getAllInstructors());
         return instructorService.getAllInstructors();
     }
 
 	@GetMapping("/auth/gymOwner/asistencia")
-	public List<GymClass> obtenerDatosAsistencia() {
-		// Utiliza el servicio para obtener las clases en curso y mapearlas a un modelo
-		return gymClassService.obtenerDatosAsistencia().stream()
-
-				.collect(Collectors.toList());
+	public ResponseEntity<List<GymClass>> obtenerDatosAsistencia() {
+	    List<GymClass> asistenciaData = gymClassService.obtenerDatosAsistencia();
+	    return ResponseEntity.ok(asistenciaData);
 	}
 
 	@GetMapping("/auth/gymOwner/popularidad")
-	public List<GymClass> obtenerDatosPopularidad() {
-		// Utiliza el servicio para obtener las clases ordenadas por popularidad y
-		// mapearlas a un modelo
-		return gymClassService.obtenerDatosPopularidad().stream()
-
-				.collect(Collectors.toList());
+	public ResponseEntity<List<GymClass>> obtenerDatosPopularidad() {
+	    List<GymClass> popularidadData = gymClassService.obtenerDatosPopularidad();
+	    return ResponseEntity.ok(popularidadData);
 	}
+
 
 
 	@PostMapping("/auth/gymOwner/instructors/edit")
@@ -369,5 +354,13 @@ public class OwnerController {
 		String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
 		return email.matches(regex);
 	}
+	
+	@GetMapping("/auth/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // Invalida la sesión actual
+        request.getSession().invalidate();
+        // Redirige a la página de inicio de sesión
+        return "redirect:/auth/login";
+    }
 
 }
