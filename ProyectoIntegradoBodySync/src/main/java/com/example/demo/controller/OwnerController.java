@@ -147,6 +147,15 @@ public class OwnerController {
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
+	
+	@PostMapping("/auth/gymUser/activateDesactivate/{id}")
+	public String activateDesativar(@PathVariable int id, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+		 gymUserService.activarDesactivar(id);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
 
 	@GetMapping("/auth/gymOwner/getClassDetails/{id}")
 	@ResponseBody
@@ -273,7 +282,6 @@ public class OwnerController {
 		model.addAttribute("ListInstructores", instructorService.getAllInstructors());
 		return GESTIONINSTRUCTORES_VIEW;
 	}
-	
 
 	@GetMapping("/auth/gymOwner/ConfiguracionGym")
 	public String ConfiguracionGym() {
@@ -297,8 +305,6 @@ public class OwnerController {
 	    List<GymClass> popularidadData = gymClassService.obtenerDatosPopularidad();
 	    return ResponseEntity.ok(popularidadData);
 	}
-
-
 
 	@PostMapping("/auth/gymOwner/instructors/edit")
 	public String editInstructor(@ModelAttribute GymUserModel instructor) {

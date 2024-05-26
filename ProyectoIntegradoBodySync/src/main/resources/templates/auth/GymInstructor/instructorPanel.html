@@ -81,10 +81,10 @@
 								</ul>
 							</div>
 							<div class="card-footer bg-transparent border-top-0">
-								<th:block th:if="${not #lists.isEmpty(activeMembers)}">
-									<button class="btn btn-primary"
-										th:attr="onclick='redirectToMembersPage(\'' + ${gymClass.id} + '\')'">
-										Ver Miembros</button>
+								<th:block th:if="${#lists.isEmpty(activeMembers)}">
+									<a
+										th:href="@{/auth/gymInstructor/GestionMiembros(classId=${gymClass.id})}"
+										class="btn btn-primary">Ver Miembros</a>
 								</th:block>
 								<button class="btn btn-success mb-3 edit-btn"
 									data-bs-toggle="modal" data-bs-target="#editExistingClassModal"

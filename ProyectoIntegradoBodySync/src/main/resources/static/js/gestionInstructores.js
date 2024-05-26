@@ -49,4 +49,36 @@ function fillEditInstructorModal(button) {
         type: 'pie',
         data: instructorStatusData
     });
+  document.addEventListener("DOMContentLoaded", function() {
+            const filterInput = document.getElementById('filterInput');
+            const activeInstructorCards = document.getElementById('activeInstructorCards');
+            const inactiveInstructorCards = document.getElementById('inactiveInstructorCards');
 
+            filterInput.addEventListener('input', function() {
+                const filterValue = filterInput.value.toLowerCase();
+                filterInstructors(activeInstructorCards, filterValue);
+                filterInstructors(inactiveInstructorCards, filterValue);
+            });
+
+            function filterInstructors(container, filterValue) {
+                const cards = container.getElementsByClassName('card');
+                Array.from(cards).forEach(card => {
+                    const cardText = card.textContent.toLowerCase();
+                    card.style.display = cardText.includes(filterValue) ? '' : 'none';
+                });
+            }
+        });
+
+    var instructorStatusData = {
+        labels: ["Activos", "Inactivos"],
+        datasets: [{
+            data: [activos, inactivos],
+            backgroundColor: ["#36a2eb", "#ff6384"]
+        }]
+    };
+
+    var ctx = document.getElementById("instructorStatusChart").getContext("2d");
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: instructorStatusData
+    });

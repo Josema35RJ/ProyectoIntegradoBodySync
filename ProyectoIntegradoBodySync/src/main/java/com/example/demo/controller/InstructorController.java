@@ -78,9 +78,9 @@ public class InstructorController {
     }
 
     @GetMapping("/auth/gymInstructor/GestionMiembros")
-    public String GestionMiembros(HttpSession session, Model model) {
+    public String GestionMiembros(@RequestParam("classId") int classId, HttpSession session, Model model) {
         // Obtener el ID de la clase almacenado en la sesión del usuario
-        int classId = (int) session.getAttribute("classId");
+        
         // Guardar el ID de la clase en la sesión
         session.setAttribute("classId", classId);
         List<GymUser> members = gymUserService.ListGymUsersByClassId(classId);
@@ -98,15 +98,11 @@ public class InstructorController {
         List<Integer> ages = members.stream()
                 .map(GymUser::getBirthDate)
                 .map(gymUserService::calculateAge)
-                .collect(Collectors.toList());
-      
-
-      
+                .collect(Collectors.toList());   
         // Añadir los miembros activos e inactivos, las edades y los IMCs al modelo
         model.addAttribute("activeMembers", activeMembers);
         model.addAttribute("inactiveMembers", inactiveMembers);
         model.addAttribute("ages", ages);
-     
 
         return GESTIONMIEMBROS_VIEW;
     }
