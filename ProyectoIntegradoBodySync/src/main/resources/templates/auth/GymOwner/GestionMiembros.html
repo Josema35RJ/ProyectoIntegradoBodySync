@@ -198,9 +198,7 @@
 										</div>
 										<hr>
 										<div class="btn-group" role="group"
-											aria-label="Acciones del Miembro">
-											<a th:href="@{/gymUser/viewProfile/{id}(id=${miembro.id})}"
-												class="btn btn-primary btn-sm">Ver Perfil</a>
+											aria-label="Acciones del Miembro">								
 											<form
 												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
 												method="post">
