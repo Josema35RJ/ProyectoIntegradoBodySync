@@ -19,6 +19,7 @@ import com.example.demo.entity.NutritionPlan;
 import com.example.demo.entity.Routine;
 import com.example.demo.entity.Speciality;
 import com.example.demo.entity.WorkoutLog;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,6 +37,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.ToString;
 
 public class ClassFeedbackModel {
 	@Id
@@ -44,10 +46,14 @@ public class ClassFeedbackModel {
 
 	@ManyToOne
 	@NotNull(message = "GymUser is required")
+	@ToString.Exclude
+	@JsonManagedReference
 	private GymUser gymUser;
 
 	@ManyToOne
 	@NotNull(message = "GymClass is required")
+	@ToString.Exclude
+	@JsonManagedReference
 	private GymClass gymClass;
 
 	private Integer rating; // e.g. on a scale of 1-5

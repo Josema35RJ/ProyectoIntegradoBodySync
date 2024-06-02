@@ -37,4 +37,9 @@ public class Achievement {
 
 	// Fecha en la que se consiguió el logro.
 	private LocalDateTime achievedAt;
+
+	public void setDeletedAt(LocalDateTime now) {
+		// TODO Auto-generated method stub
+		
+	}
 }

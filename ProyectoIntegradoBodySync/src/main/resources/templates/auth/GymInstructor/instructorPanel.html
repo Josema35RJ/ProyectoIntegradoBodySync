@@ -26,10 +26,27 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item"><a class="nav-link"
-						href="/auth/gymInstructor/instructorPanel"><i
-							class="fas fa-dumbbell"></i> Gestión de Clases</a></li>
-					<li class="nav-item"><a class="nav-link" href="/auth/logout"><i
-							class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+						href="/auth/gymInstructor/instructorPanel"> <i
+							class="fas fa-dumbbell"></i> Gestión de Clases
+					</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymInstructor/GestionEjercicios"> <i
+							class="fas fa-dumbbell"></i> Gestión de Ejercicios
+					</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymInstructor/GestionRutinas"> <i
+							class="fas fa-dumbbell"></i> Gestión de Rutinas
+					</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymInstructor/GestionAchievement"><i
+							class="fas fa-trophy"></i> Gestión de Logros</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/auth/gymInstructor/GestionNutricion"> <i
+							class="fas fa-dumbbell"></i> Gestión de Nutrición
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/auth/logout">
+							<i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+					</a></li>
 				</ul>
 			</div>
 		</div>
@@ -82,14 +99,15 @@
 							</div>
 							<div class="card-footer bg-transparent border-top-0">
 								<th:block th:if="${#lists.isEmpty(activeMembers)}">
-									<a
-										th:href="@{/auth/gymInstructor/GestionMiembros(classId=${gymClass.id})}"
-										class="btn btn-primary">Ver Miembros</a>
+									<form id="classIdForm" method="post"
+										action="/auth/gymInstructor/GestionMiembros">
+										<input type="hidden" name="classId" th:value="${gymClass.id}">
+										<input type="hidden" th:name="${_csrf.parameterName}"
+													th:value="${_csrf.token}" />
+										<button type="submit" class="btn btn-primary">Ver
+											Miembros</button>
+									</form>
 								</th:block>
-								<button class="btn btn-success mb-3 edit-btn"
-									data-bs-toggle="modal" data-bs-target="#editExistingClassModal"
-									th:attr="data-class-id=${gymClass.id}, data-class-name=${gymClass.name}, data-class-description=${gymClass.description}, data-class-instructor=${gymClass.instructor.id}, data-class-time=${gymClass.time}, data-class-capacity=${gymClass.maximumCapacity}, data-class-start-date=${gymClass.startDate}, data-class-end-date=${gymClass.endDate}, data-class-duration=${gymClass.duration}">
-									Editar Clase</button>
 								<button class="btn btn-warning mb-3 toggle-btn"
 									data-bs-toggle="modal" data-bs-target="#toggleClassModal"
 									th:attr="data-class-id=${gymClass.id}, data-class-active=${gymClass.active}">

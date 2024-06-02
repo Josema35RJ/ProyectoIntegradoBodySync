@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 //La clase NutritionPlan representa un plan de nutrición personalizado para un usuario.
 @Entity
@@ -20,11 +21,12 @@ public class NutritionPlan {
 	// Identificador único para cada plan de nutrición.
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private int id;
 
 	// Usuario al que pertenece el plan de nutrición.
 	@ManyToOne
 	@NotNull(message = "GymUser is required")
+    @ToString.Exclude // Excluye el campo gymUser del método toString()
 	private GymUser gymUser;
 
 	// Nombre del plan de nutrición.

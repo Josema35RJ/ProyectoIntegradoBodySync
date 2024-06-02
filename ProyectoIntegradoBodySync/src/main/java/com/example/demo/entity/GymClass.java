@@ -8,6 +8,9 @@ import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -18,11 +21,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "gymClass")
@@ -63,6 +68,7 @@ public class GymClass {
 
     @ManyToOne
     @JoinColumn(name="instructor_id", nullable=false)
+    @JsonBackReference
     private GymUser instructor;
     
     private boolean active = true; // Nuevo campo
@@ -72,6 +78,11 @@ public class GymClass {
 
     @ElementCollection
     private Set<Integer> reservationIds = new HashSet<>();
+
+    @OneToMany(mappedBy = "gymClass")
+    @JsonManagedReference
+    @ToString.Exclude
+    private Set<ClassFeedback> feedbacks = new HashSet<>();
 
     public boolean addReservation(int userId) {
         if (reservationIds.size() < maximumCapacity) {

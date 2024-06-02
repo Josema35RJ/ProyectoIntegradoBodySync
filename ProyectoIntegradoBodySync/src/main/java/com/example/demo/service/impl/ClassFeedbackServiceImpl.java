@@ -10,6 +10,7 @@ import com.example.demo.converter.ClassFeedbackConverter;
 import com.example.demo.converter.GymUserConverter;
 import com.example.demo.entity.ClassFeedback;
 import com.example.demo.repository.ClassFeedbackRepository;
+import com.example.demo.repository.GymClassRepository;
 import com.example.demo.repository.GymUserRepository;
 import com.example.demo.service.ClassFeedbackService;
 
@@ -23,10 +24,15 @@ public class ClassFeedbackServiceImpl implements ClassFeedbackService {
 	@Autowired
 	@Qualifier("classFeedbackConverter")
 	private ClassFeedbackConverter classFeedbackConverter;	
+	
+	 @Autowired
+	    @Qualifier("gymClassRepository")
+	    private GymClassRepository gymClassRepository;
 
     @Override
     public List<ClassFeedback> getFeedbackByGymClassId(int classId) {
-        return classFeedbackRepository.findByGymClassId(classId);
+    	
+        return classFeedbackRepository.findByGymClass(gymClassRepository.findById(classId).get());
     }
 
     @Override

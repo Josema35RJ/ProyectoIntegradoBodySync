@@ -10,14 +10,14 @@ import com.example.demo.entity.GymUser;
 import com.example.demo.model.GymUserModel;
 
 @Repository("gymUserRepository")
-public interface GymUserRepository extends JpaRepository<GymUser, Serializable> {
+public interface GymUserRepository extends JpaRepository<GymUser, Integer> {
 
     boolean existsByUsername(String email);
 	
     List<GymUser> findByDeletedAndRole(boolean x,String role);
 	GymUser findByUsername(String email);
 	List<GymUser> findByEnrolledClasses_Id(int classId);
-	GymUser findById(int id);
+	
 
 	 List<GymUser> findByRole( String role);
 

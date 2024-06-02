@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,7 @@ import com.example.demo.service.ClassFeedbackService;
 import com.example.demo.service.GymClassService;
 import com.example.demo.service.GymUserService;
 import com.example.demo.service.InstructorService;
-import com.example.demo.service.impl.ChurnPredictionService;
+import com.example.demo.service.impl.ChurnPredictionServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,7 +72,7 @@ public class OwnerController {
 
 	@Autowired
 	@Qualifier("churnPredictionService")
-	private ChurnPredictionService churnPredictionService;
+	private ChurnPredictionServiceImpl churnPredictionService;
 
 	@Autowired
 	@Qualifier("gymUserToDataFrameConverter")
@@ -90,7 +92,6 @@ public class OwnerController {
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
-
 	
 
 	@PostMapping("/auth/gymOwner/updateClass/{id}")
@@ -199,6 +200,8 @@ public class OwnerController {
 		model.addAttribute("ages", ages);
 		model.addAttribute("bmis", bmis);
 		model.addAttribute("daysSinceCreation", createdDates);
+		LocalDate fechaActual = LocalDate.now();
+		model.addAttribute("fechaActual", fechaActual);
 
 		return GESTIONMIEMBROS_VIEW;
 	}
@@ -237,18 +240,11 @@ public class OwnerController {
 		return GESTIONMIEMBROS_VIEW;
 	}
 
-	@GetMapping("/gymUser/viewAchievements/{id}")
+	@GetMapping("/auth/gymOwner/viewAchievements/{id}")
 	public String viewAchievementsGymUser(@PathVariable("id") int id, Model model) {
-		GymUser gymUser = gymUserRepository.findById(id);
+		GymUser gymUser = gymUserRepository.findById(id).get();
 		model.addAttribute("achievements", gymUser.getAchievements());
 		return VIEWACHIEVEMNET_VIEW;
-	}
-
-	@GetMapping("/auth/gymOwner/viewFeedback/{classId}")
-	public String viewFeedback(@PathVariable int classId, Model model) {
-		List<ClassFeedback> feedbacks = classFeedbackService.getFeedbackByGymClassId(classId);
-		model.addAttribute("feedbacks", feedbacks);
-		return "viewFeedback";
 	}
 
 	@PostMapping("/auth/gymOwner/addFeedback")
@@ -278,9 +274,24 @@ public class OwnerController {
 
 	@GetMapping("/auth/gymOwner/GestionInstructores")
 	public String GestionInstructores(Model model) {
-
-		model.addAttribute("ListInstructores", instructorService.getAllInstructors());
-		return GESTIONINSTRUCTORES_VIEW;
+	    List<GymUser> allInstructors = instructorService.getAllInstructors();
+	    
+	    List<GymUser> activeInstructors = new ArrayList<>();
+	    List<GymUser> inactiveInstructors = new ArrayList<>();
+	    
+	    for (GymUser instructor : allInstructors) {
+	    	System.out.println();
+	        if (instructor.isEnabled()) {
+	            activeInstructors.add(instructor);
+	        } else {
+	            inactiveInstructors.add(instructor);
+	        }
+	    }
+	    
+	    model.addAttribute("activeInstructors", activeInstructors);
+	    model.addAttribute("inactiveInstructors", inactiveInstructors);
+	    
+	    return GESTIONINSTRUCTORES_VIEW;
 	}
 
 	@GetMapping("/auth/gymOwner/ConfiguracionGym")

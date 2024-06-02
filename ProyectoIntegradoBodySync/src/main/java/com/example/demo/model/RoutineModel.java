@@ -1,12 +1,11 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import java.util.List;
 
-import com.example.demo.model.GymUserModel;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.demo.entity.Exercise;
+import com.example.demo.entity.GymUser;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,17 +13,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
 
-//La clase Routine representa una rutina de ejercicios que puede ser realizada por un usuario.
-@Entity
-@Table(name = "routine")
-@Data
-public class Routine {
+public class RoutineModel {
 	// Identificador único para cada rutina.
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -134,3 +134,16 @@ body {
 .card-body.finished::before {
     background-color: #dc3545; /* Rojo para clases finalizadas */
 }
+.star-rating {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.star-rating .fa-star {
+    color: #e3e6f0;
+    font-size: 1.2rem;
+}
+
+.star-rating .fa-star.filled {
+    color: #ffc107;
+}

@@ -9,6 +9,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "class_feedback")
@@ -20,10 +23,14 @@ public class ClassFeedback {
 
     @ManyToOne
     @NotNull(message = "GymUser is required")
+    @ToString.Exclude
+    @JsonBackReference
     private GymUser gymUser;
 
     @ManyToOne
     @NotNull(message = "GymClass is required")
+    @ToString.Exclude
+    @JsonBackReference
     private GymClass gymClass;
 
     private Integer rating; // e.g. on a scale of 1-5

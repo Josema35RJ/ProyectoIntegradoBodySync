@@ -14,14 +14,14 @@ import com.example.demo.service.GymUserService;
 import smile.data.DataFrame;
 
 @Service("churnPredictionService")
-public class ChurnPredictionService {
+public class ChurnPredictionServiceImpl {
 
     private final GymUserService gymUserService;
     private final GymUserToDataFrameConverter gymUserToDataFrameConverter;
     private final ChurnPredictionModel churnPredictionModel;
 
     @Autowired
-    public ChurnPredictionService(GymUserService gymUserService, GymUserToDataFrameConverter gymUserToDataFrameConverter, ChurnPredictionModel churnPredictionModel) {
+    public ChurnPredictionServiceImpl(GymUserService gymUserService, GymUserToDataFrameConverter gymUserToDataFrameConverter, ChurnPredictionModel churnPredictionModel) {
         this.gymUserService = gymUserService;
         this.gymUserToDataFrameConverter = gymUserToDataFrameConverter;
         this.churnPredictionModel = churnPredictionModel;

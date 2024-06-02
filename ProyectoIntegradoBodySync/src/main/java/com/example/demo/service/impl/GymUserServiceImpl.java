@@ -20,12 +20,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.converter.ExerciseConverter;
 import com.example.demo.converter.GymUserConverter;
+import com.example.demo.entity.Exercise;
 import com.example.demo.entity.GymUser;
+import com.example.demo.entity.Routine;
+import com.example.demo.model.ExerciseModel;
 import com.example.demo.model.GymUserModel;
 import com.example.demo.repository.GymUserRepository;
+import com.example.demo.repository.NutritionPlanRepository;
+import com.example.demo.repository.RoutineRepository;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.GymUserService;
+
+import jakarta.transaction.Transactional;
 
 @Service("gymUserService")
 public class GymUserServiceImpl implements UserDetailsService, GymUserService {
@@ -35,8 +43,20 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
 	private GymUserRepository gymUserRepository;
 	
 	@Autowired
+	@Qualifier("routineRepository")
+	private RoutineRepository routineRepository;
+	
+	@Autowired
+	@Qualifier("nutritionPlanRepository")
+	private NutritionPlanRepository nutritionPlanRepository;
+	
+	@Autowired
 	@Qualifier("gymUserConverter")
 	private GymUserConverter gymUserConverter;
+	
+	@Autowired
+	@Qualifier("exerciseConverter")
+	private ExerciseConverter exerciseConverter;
 	
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -116,7 +136,7 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
 	
 	@Override
 	public boolean activarDesactivar(int id) {
-		GymUser gymUser = gymUserRepository.findById(id);
+		GymUser gymUser = gymUserRepository.findById(id).get();
 		if (gymUser != null) {
 			if(!gymUser.isEnabled()) 
 				gymUser.setEnabled(true);
@@ -130,7 +150,7 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
 	
 	@Override
 	public boolean eliminarGymUser(int id) {
-	    GymUser gymUser = gymUserRepository.findById(id);
+	    GymUser gymUser = gymUserRepository.findById(id).get();
 	    if (gymUser != null) {
 	        if(!gymUser.isDeleted()) {
 	            gymUser.setDeleted(true);
@@ -145,7 +165,7 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
 	@Override
 	public GymUserModel getGymUserById(int id) {
 		// TODO Auto-generated method stub
-		GymUser gymUser = gymUserRepository.findById(id);
+		GymUser gymUser = gymUserRepository.findById(id).orElse(null);
 
 		return gymUserConverter.transform(gymUser);
 	}
@@ -189,5 +209,40 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
         return gymUserRepository.findByEnrolledClasses_Id(classId);
     }
 
+	@Override
+	public List<ExerciseModel> ListExercisesModelByGymUser(int id) {
+		// TODO Auto-generated method stub
+		List<ExerciseModel> l = new ArrayList<>();
+		for(Exercise exe: gymUserRepository.findById(id).get().getExercises()) {
+			l.add(exerciseConverter.transform(exe));
+			
+		}
+		return l;
+	}
 
+	@Override
+	public void setListExercisesModelByGymUser(List<ExerciseModel> exercises, int id) {
+		// TODO Auto-generated method stub
+		List<Exercise> l = new ArrayList<>();
+		for(ExerciseModel exe: exercises) {
+			l.add(exerciseConverter.transform(exe));
+			
+		}
+		gymUserRepository.findById(id).get().setExercises(l);
+	}
+
+	@Override
+	public void addRoutineToUser(Integer userId, Routine routine) {
+		// TODO Auto-generated method stub
+		 GymUser gymUser = gymUserRepository.findById(userId).get();
+	        
+	        // Establecer la relación bidireccional
+	  
+	        gymUser.getRoutines().add(routine);
+
+	        gymUserRepository.save(gymUser);
+	}
+	
+	 
+	  
 }

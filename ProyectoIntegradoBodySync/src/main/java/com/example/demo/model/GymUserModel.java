@@ -13,6 +13,7 @@ import com.example.demo.entity.Achievement;
 import com.example.demo.entity.ClassReservation;
 import com.example.demo.entity.Exercise;
 import com.example.demo.entity.GymClass;
+import com.example.demo.entity.GymUser;
 import com.example.demo.entity.MealLog;
 import com.example.demo.entity.MusclePainLog;
 import com.example.demo.entity.NutritionPlan;
@@ -29,6 +30,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
@@ -213,6 +215,15 @@ public class GymUserModel {
 	@CollectionTable(name = "attendance_days", joinColumns = @JoinColumn(name = "user_id"))
 	@Column(name = "day")
 	private Set<String> attendanceDays;
+	
+	// Lista de gymBros.
+		@ManyToMany
+	    @JoinTable(
+	        name = "gym_bros",
+	        joinColumns = @JoinColumn(name = "gym_user_id"),
+	        inverseJoinColumns = @JoinColumn(name = "gym_bro_id")
+	    )
+	    private List<GymUser> gymBros;
 
 	public GymUserModel() {
 		super();
@@ -608,6 +619,14 @@ public class GymUserModel {
 		this.churn = churn;
 	}
 
+	public List<GymUser> getGymBros() {
+		return gymBros;
+	}
+
+	public void setGymBros(List<GymUser> gymBros) {
+		this.gymBros = gymBros;
+	}
+
 	@Override
 	public String toString() {
 		return "GymUserModel [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dni=" + dni
@@ -616,7 +635,7 @@ public class GymUserModel {
 				+ ", height=" + height + ", activityLevel=" + activityLevel + ", goal=" + goal + ", deleted=" + deleted
 				+ ", enabled=" + enabled + ", biography=" + biography + ", specialtyList=" + specialtyList
 				+ ", gymName=" + gymName + ", gymLocation=" + gymLocation + ", createdDate=" + createdDate
-				+ ", updatedDate=" + updatedDate + ", routines=" + routines + ", exercises=" + exercises
+				+ ", updatedDate=" + updatedDate + ", exercises=" + exercises
 				+ ", nutritionPlans=" + nutritionPlans + ", achievements=" + achievements + ", classReservations="
 				+ classReservations + ", workoutLogs=" + workoutLogs + ", mealLogs=" + mealLogs + ", musclePainLogs="
 				+ musclePainLogs + ", enrolledClasses=" + enrolledClasses + ", paymentStatus=" + paymentStatus

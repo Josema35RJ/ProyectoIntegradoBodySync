@@ -28,11 +28,10 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item"><a class="nav-link"
-						href="/auth/gymInstructor/instructorPanel"><i class="fas fa-dumbbell"></i>
-							Gestión de Clases</a></li>
-							<li class="nav-item"><a class="nav-link"
-                        href="/auth/logout"><i class="fas fa-sign-out-alt"></i>
-                        Cerrar Sesión</a></li>
+						href="/auth/gymInstructor/instructorPanel"><i
+							class="fas fa-dumbbell"></i> Gestión de Clases</a></li>
+					<li class="nav-item"><a class="nav-link" href="/auth/logout"><i
+							class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
 				</ul>
 			</div>
 		</div>
@@ -95,12 +94,7 @@
 												th:text="${miembro.height}">1.75</span> cm<br> <strong>Nivel
 												de Actividad:</strong> <span th:text="${miembro.activityLevel}">Alto</span><br>
 											<strong>Objetivo de Fitness:</strong> <span
-												th:text="${miembro.goal}">Pérdida de peso</span><br> <strong>Clases
-												Inscritas:</strong>
-										<ul>
-											<li th:each="clase : ${miembro.enrolledClasses}"
-												th:text="${clase.name}">Nombre de la Clase</li>
-										</ul>
+												th:text="${miembro.goal}">Pérdida de peso</span><br>
 										</p>
 										<div class="injuries-container">
 											<h6>Lesiones</h6>
@@ -114,17 +108,19 @@
 										<hr>
 										<div class="btn-group" role="group"
 											aria-label="Acciones del Miembro">
-											<a th:href="@{/gymUser/viewProfile/{id}(id=${miembro.id})}"
-												class="btn btn-primary btn-sm">Ver Perfil</a>
 											<form
 												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
 												method="post">
 												<button type="submit" class="btn btn-success btn-sm">Desactivar</button>
 											</form>
-
-											<a
-												th:href="@{/gymUser/viewAchievements/{id}(id=${miembro.id})}"
-												class="btn btn-success btn-sm">Ver Logros</a>
+											<form id="viewAchievementsForm" method="post"
+												action="/auth/gymInstructor/viewAchievements">
+												<input type="hidden" name="id" th:value="${miembro.id}">
+												<input type="hidden" th:name="${_csrf.parameterName}"
+													th:value="${_csrf.token}" />
+												<button type="submit" class="btn btn-success btn-sm">Ver
+													Logros</button>
+											</form>
 										</div>
 										<div th:if="${miembro.paymentStatus == false}"
 											class="alert alert-danger mt-3" role="alert">
@@ -169,12 +165,7 @@
 												th:text="${miembro.height}">1.75</span> cm<br> <strong>Nivel
 												de Actividad:</strong> <span th:text="${miembro.activityLevel}">Alto</span><br>
 											<strong>Objetivo de Fitness:</strong> <span
-												th:text="${miembro.goal}">Pérdida de peso</span><br> <strong>Clases
-												Inscritas:</strong>
-										<ul>
-											<li th:each="clase : ${miembro.enrolledClasses}"
-												th:text="${clase.name}">Nombre de la Clase</li>
-										</ul>
+												th:text="${miembro.goal}">Pérdida de peso</span><br>
 										</p>
 										<div class="injuries-container">
 											<h6>Lesiones</h6>
@@ -188,8 +179,6 @@
 										<hr>
 										<div class="btn-group" role="group"
 											aria-label="Acciones del Miembro">
-											<a th:href="@{/gymUser/viewProfile/{id}(id=${miembro.id})}"
-												class="btn btn-primary btn-sm">Ver Perfil</a>
 											<form
 												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
 												method="post">
@@ -199,9 +188,14 @@
 												method="post">
 												<button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
 											</form>
-											<a
-												th:href="@{/gymUser/viewAchievements/{id}(id=${miembro.id})}"
-												class="btn btn-success btn-sm">Ver Logros</a>
+											<form id="viewAchievementsForm" method="post"
+												action="/auth/gymInstructor/viewAchievements">
+												<input type="hidden" name="id" value="${miembro.id}">
+												<input type="hidden" th:name="${_csrf.parameterName}"
+													th:value="${_csrf.token}" />
+												<button type="submit" class="btn btn-success btn-sm">Ver
+													Logros</button>
+											</form>
 										</div>
 										<div th:if="${miembro.paymentStatus == false}"
 											class="alert alert-danger mt-3" role="alert">
@@ -213,7 +207,8 @@
 											<strong>¡Atención!</strong> Este miembro tiene un alto riesgo
 											de abandono.
 										</div>
-										<div th:if="${miembro.createdDate}"
+										<div
+											th:if="${miembro.createdDate != null and miembro.createdDate == fechaActual}"
 											class="alert alert-info mt-3" role="alert">
 											<strong>¡Bienvenido!</strong> Nuevo miembro del gimnasio.
 										</div>

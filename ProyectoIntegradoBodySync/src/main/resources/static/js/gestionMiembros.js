@@ -73,3 +73,26 @@ function filterMembers() {
 document.getElementById('nameFilter').addEventListener('input', filterMembers);
 document.getElementById('emailFilter').addEventListener('input', filterMembers);
 document.getElementById('cityFilter').addEventListener('input', filterMembers);
+// Función para mostrar la notificación de logro
+    function mostrarNotificacionLogro() {
+        var toast = new bootstrap.Toast(document.getElementById('achievementToast'));
+        toast.show();
+    }
+
+    // Verificar periódicamente si se ha alcanzado un nuevo logro
+    setInterval(function() {
+        // Obtener todas las tarjetas de miembros activos
+        var tarjetasMiembrosActivos = document.querySelectorAll('.tab-pane.active .member-card');
+
+        // Iterar sobre cada tarjeta de miembro activo
+        tarjetasMiembrosActivos.forEach(function(tarjeta) {
+            // Obtener el atributo data-logro de la tarjeta
+            var logro = tarjeta.getAttribute('data-logro');
+
+            // Verificar si el usuario ha alcanzado un nuevo logro
+            if (logro && logro === 'true') {
+                // Si el usuario ha alcanzado un nuevo logro, mostrar la notificación
+                mostrarNotificacionLogro();
+            }
+        });
+    }, 30000); // 30000 milisegundos = 30 segundos

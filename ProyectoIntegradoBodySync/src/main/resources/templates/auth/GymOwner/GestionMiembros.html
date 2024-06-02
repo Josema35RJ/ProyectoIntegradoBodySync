@@ -41,9 +41,8 @@
 					<li class="nav-item"><a class="nav-link"
 						href="/auth/gymOwner/ConfiguracionGym"><i class="fas fa-cogs"></i>
 							Configuración del Gimnasio</a></li>
-							<li class="nav-item"><a class="nav-link"
-                        href="/auth/logout"><i class="fas fa-sign-out-alt"></i>
-                        Cerrar Sesión</a></li>
+					<li class="nav-item"><a class="nav-link" href="/auth/logout"><i
+							class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
 				</ul>
 			</div>
 		</div>
@@ -134,7 +133,7 @@
 											</form>
 
 											<a
-												th:href="@{/gymUser/viewAchievements/{id}(id=${miembro.id})}"
+												th:href="@{/auth/gymOwner/viewAchievements/{id}(id=${miembro.id})}"
 												class="btn btn-success btn-sm">Ver Logros</a>
 										</div>
 										<div th:if="${miembro.paymentStatus == false}"
@@ -147,10 +146,11 @@
 											<strong>¡Atención!</strong> Este miembro tiene un alto riesgo
 											de abandono.
 										</div>
-										<div th:if="${miembro.createdDate}"
+										<div
+											th:if="${miembro.createdDate != null and miembro.createdDate == fechaActual}"
 											class="alert alert-info mt-3" role="alert">
 											<strong>¡Bienvenido!</strong> Nuevo miembro del gimnasio.
-										</div>
+										</div>								
 									</div>
 								</div>
 							</div>
@@ -198,7 +198,7 @@
 										</div>
 										<hr>
 										<div class="btn-group" role="group"
-											aria-label="Acciones del Miembro">								
+											aria-label="Acciones del Miembro">
 											<form
 												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
 												method="post">
@@ -256,11 +256,5 @@
 		<!-- Scripts para Chart.js -->
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script src="/js/gestionMiembros.js"></script>
-
-		<!-- Bootstrap and interactive functionality scripts -->
-		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-			    <script src="/js/gestionInstructores.js"></script>
 </body>
 </html>

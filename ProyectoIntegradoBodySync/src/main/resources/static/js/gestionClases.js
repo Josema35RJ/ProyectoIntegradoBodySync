@@ -351,5 +351,69 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
             .catch(error => console.error('Error al cambiar el estado de la clase:', error));
     });
 });
+document.querySelectorAll('.view-feedback-btn').forEach(btn => {
+    btn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+        var classId = this.getAttribute('data-class-id');
 
+        // Realizar una solicitud AJAX para obtener el feedback
+        fetch(`/auth/gymOwner/viewFeedback/${classId}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Error al obtener el feedback de la clase:', response.statusText);
+                }
+            })
+            .then(feedbacks => {
+                if (feedbacks) {
+                    renderFeedback(feedbacks);
+                }
+            })
+            .catch(error => console.error('Error al obtener el feedback de la clase:', error));
+    });
+});
 
+function renderFeedback(feedbacks) {
+    const feedbackContainer = document.getElementById('feedbackContainer');
+    feedbackContainer.innerHTML = ''; // Clear previous feedback
+
+    feedbacks.forEach(feedback => {
+        const feedbackItem = document.createElement('div');
+        feedbackItem.className = 'feedback-item mb-3';
+
+        feedbackItem.innerHTML = `
+            <div class="card">
+                <div class="card-body">
+                    <div class="star-rating" data-rating="${feedback.rating}">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="card-text mt-2">${feedback.comments}</p>
+                </div>
+            </div>
+        `;
+
+        feedbackContainer.appendChild(feedbackItem);
+    });
+
+    updateStarRatings();
+}
+
+function updateStarRatings() {
+    document.querySelectorAll('.star-rating').forEach(starRating => {
+        const rating = parseFloat(starRating.getAttribute('data-rating'));
+        const stars = starRating.querySelectorAll('.fa-star');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('filled');
+            }
+        });
+    });
+}
+
+// Llamar a la función para actualizar las estrellas en caso de que el contenido ya esté cargado
+updateStarRatings();
