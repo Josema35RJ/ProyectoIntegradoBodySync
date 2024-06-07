@@ -121,12 +121,34 @@ function changePage(page) {
     // Implementa lógica para mostrar la página 'page'
 }
 
+// Variables para controlar la paginación
+let currentPage = 1;
+const itemsPerPage = 6; // Cambia este valor según la cantidad de elementos que quieras mostrar por página
+const totalItems = 30; // Ejemplo: total de elementos a paginar
+
+// Función para mostrar la página anterior
 function previousPage() {
-    // Implementa lógica para mostrar la página anterior
+    if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+    }
 }
 
+// Función para mostrar la página siguiente
 function nextPage() {
-    // Implementa lógica para mostrar la página siguiente
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+    }
+}
+
+// Función para mostrar los elementos de la página actual
+function showPage(page) {
+    // Calcula el rango de elementos a mostrar en la página actual
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
 }
 
 // Llama a esta función para generar la paginación cuando la página cargue
