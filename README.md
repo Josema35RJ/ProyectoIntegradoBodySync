@@ -1,6 +1,6 @@
 admin:
 
-josemanuel@gmail.com | Josema35RJ.
+josemanuel@gmail.com | Josema35.
 
 instructores
 
