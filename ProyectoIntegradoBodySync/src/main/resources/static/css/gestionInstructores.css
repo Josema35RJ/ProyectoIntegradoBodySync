@@ -85,8 +85,8 @@ body {
 
 .chart {
     flex: 1;
-    min-width: 300px;
-    max-width: 500px; /* Ajusta este valor según tus necesidades */
+    min-width: 30px;
+    max-width: 50px; /* Ajusta este valor según tus necesidades */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
@@ -94,13 +94,13 @@ body {
 }
 
 .chart-container {
-    max-width: 400px; /* Ancho máximo del contenedor de gráficas */
+    max-width: 40px; /* Ancho máximo del contenedor de gráficas */
     margin: 0 auto; /* Centrar el contenedor */
 }
 
 .chart {
-    width: 100%; /* Ajustar el ancho de la gráfica al contenedor */
-    max-width: 100%; /* Asegurar que la gráfica no exceda el contenedor */
+    width: 40%; /* Ajustar el ancho de la gráfica al contenedor */
+    max-width: 40%; /* Asegurar que la gráfica no exceda el contenedor */
     height: auto; /* Hacer que la altura se ajuste automáticamente */
 }
 

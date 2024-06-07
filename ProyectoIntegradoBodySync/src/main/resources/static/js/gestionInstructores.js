@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var city = button.getAttribute('data-city');
         var province = button.getAttribute('data-province');
         var postalCode = button.getAttribute('data-postalCode');
-        var role = button.getAttribute('data-role');
+        var role = button.getAttribute('data-role'); // Aquí se corrigió 'data-role'
 
         document.getElementById('editInstructorId').value = id;
         document.getElementById('editFirstName').value = firstName;
@@ -31,8 +31,10 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('editCity').value = city;
         document.getElementById('editProvince').value = province;
         document.getElementById('editPostalCode').value = postalCode;
-        document.getElementById('editRole').value = role;  // Cambié el id a 'editRole' para evitar duplicados
+        document.getElementById('editRole').value = role;
     }
+
+    mostrarErrores();
 
     const filterInput = document.getElementById('filterInput');
     const activeInstructorCards = document.getElementById('activeInstructorCards');
@@ -127,6 +129,4 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-
-    mostrarErrores();
 });

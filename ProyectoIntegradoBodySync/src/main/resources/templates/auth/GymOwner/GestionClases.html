@@ -302,7 +302,7 @@
 							<!-- Selector de instructores -->
 							<div class="mb-3">
 								<label for="editClassInstructor" class="form-label">Instructor</label>
-								<select class="form-control" id="editClassInstructor"
+								<select class="form-control" id="newClassInstructor"
 									name="instructorId" required>
 									<option th:each="instructor : ${instructors}"
 										th:value="${instructor.id}"
@@ -311,35 +311,6 @@
 							</div>
 							<button type="submit" class="btn btn-primary">Guardar
 								Cambios</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal para Activar/Desactivar Clase -->
-		<div class="modal fade" id="toggleClassModal" tabindex="-1"
-			aria-labelledby="toggleClassModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="toggleClassModalLabel">Activar/Desactivar
-							Clase</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<form id="toggleClassForm" action="/auth/gymOwner/toggleClass"
-							method="post">
-							<!-- Token CSRF -->
-							<input type="hidden" th:name="${_csrf.parameterName}"
-								th:value="${_csrf.token}" /> <input type="hidden"
-								id="toggleClassId" name="id"> <input type="hidden"
-								id="toggleClassActive" name="active">
-
-							<p id="toggleClassMessage"></p>
-							<button type="submit" class="btn btn-primary"
-								id="toggleClassConfirmButton"></button>
 						</form>
 					</div>
 				</div>

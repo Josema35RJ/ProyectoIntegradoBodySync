@@ -122,36 +122,6 @@ public class OwnerController {
 		String referer = request.getHeader("Referer");	
 		return "redirect:" + referer;
 	}
-
-	@GetMapping("/auth/gymOwner/activateClass/{id}")
-	public String activateClass(@PathVariable int id, RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
-		GymClass gymClass = gymClassService.getClassById(id);
-		if (gymClass != null) {
-			gymClass.setActive(true);
-			gymClassService.updateClass(gymClass);
-			redirectAttributes.addFlashAttribute("success", "Clase activada con éxito");
-		} else {
-			redirectAttributes.addFlashAttribute("error", "Clase no encontrada");
-		}
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@GetMapping("/auth/gymOwner/deactivateClass/{id}")
-	public String deactivateClass(@PathVariable int id, RedirectAttributes redirectAttributes,
-			HttpServletRequest request) {
-		GymClass gymClass = gymClassService.getClassById(id);
-		if (gymClass != null) {
-			gymClass.setActive(false);
-			gymClassService.updateClass(gymClass);
-			redirectAttributes.addFlashAttribute("success", "Clase desactivada con éxito");
-		} else {
-			redirectAttributes.addFlashAttribute("error", "Clase no encontrada");
-		}
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
 	
 	@PostMapping("/auth/gymUser/activateDesactivate/{id}")
 	public String activateDesativar(@PathVariable int id, RedirectAttributes redirectAttributes,
@@ -282,22 +252,8 @@ public class OwnerController {
 
 	@GetMapping("/auth/gymOwner/GestionInstructores")
 	public String GestionInstructores(Model model) {
-	    List<GymUser> allInstructors = instructorService.getAllInstructors();
-	    
-	    List<GymUser> activeInstructors = new ArrayList<>();
-	    List<GymUser> inactiveInstructors = new ArrayList<>();
-	    
-	    for (GymUser instructor : allInstructors) {
-	    	System.out.println();
-	        if (instructor.isEnabled()) {
-	            activeInstructors.add(instructor);
-	        } else {
-	            inactiveInstructors.add(instructor);
-	        }
-	    }
-	    
-	    model.addAttribute("activeInstructors", activeInstructors);
-	    model.addAttribute("inactiveInstructors", inactiveInstructors);
+
+	    model.addAttribute("ListInstructores", instructorService.getAllInstructors());
 	    
 	    return GESTIONINSTRUCTORES_VIEW;
 	}

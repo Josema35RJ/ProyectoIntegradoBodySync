@@ -229,6 +229,7 @@ $('#editExistingClassModal').on('show.bs.modal', function(event) {
 	modal.find('.modal-body #editClassTime').val(classTime);
 	modal.find('.modal-body #editClassMaximumCapacity').val(classCapacity);
 	modal.find('.modal-body #editClassStartDate').val(classStartDate);
+	modal.find('.modal-body #editclassInstructorId').val(classInstructorId);
 	modal.find('.modal-body #editClassEndDate').val(classEndDate);
 	modal.find('.modal-body #editClassDuration').val(classDuration); // Establece la duración en el campo del formulario
 
@@ -262,61 +263,26 @@ $('#editExistingClassModal').on('show.bs.modal', function(event) {
 
 	modal.find('#editExistingClassForm').attr('action', '/auth/gymOwner/updateClass/' + classId);
 });
-$('#toggleClassModal')
-	.on(
-		'show.bs.modal',
-		function(event) {
-			var button = $(event.relatedTarget) // Botón que activó el modal
-			var classId = button.data('class-id') // Extrae la información de los atributos data-*
-			var classActive = button.data('class-active')
-
-			var modal = $(this)
-			if (classActive) {
-				modal
-					.find('.modal-body #toggleClassMessage')
-					.text(
-						'¿Estás seguro de que quieres desactivar esta clase?')
-				modal.find('.modal-footer #confirmToggleLink')
-					.attr(
-						'href',
-						'/auth/gymOwner/deactivateClass/'
-						+ classId)
-			} else {
-				modal
-					.find('.modal-body #toggleClassMessage')
-					.text(
-						'¿Estás seguro de que quieres activar esta clase?')
-				modal.find('.modal-footer #confirmToggleLink')
-					.attr(
-						'href',
-						'/auth/gymOwner/activateClass/'
-						+ classId)
-			}
-		})
-
-
-// Para el botón de activar/desactivar clase
 document.querySelectorAll('.toggle-btn').forEach(btn => {
-	btn.addEventListener('click', function(event) {
-		event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
-		var classId = this.getAttribute('data-class-id');
-		var isActive = this.getAttribute('data-class-active') === 'true'; // Determinar si la clase está activa o no
-		var action = isActive ? 'deactivateClass' : 'activateClass'; // Determinar la acción según el estado actual
-		// Enviar una solicitud GET al endpoint correspondiente para activar/desactivar la clase
-		fetch(`/auth/gymOwner/${action}/${classId}`)
-			.then(response => {
-				if (response.ok) {
-					// Actualizar el estado del botón y la interfaz de usuario si es necesario
-					this.setAttribute('data-class-active', !isActive); // Actualizar el estado del botón
-					var buttonText = isActive ? 'Activar' : 'Desactivar';
-					btn.querySelector('span').innerText = buttonText; // Actualizar el texto del botón
-				} else {
-					// Manejar errores si los hay
-				}
-			})
-			.catch(error => console.error('Error al cambiar el estado de la clase:', error));
-	});
+    btn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+        var classId = this.getAttribute('data-class-id');
+        var isActive = this.getAttribute('data-class-active') === 'true'; // Determinar si la clase está activa o no
+        var action = isActive ? 'deactivateClass' : 'activateClass'; // Determinar la acción según el estado actual
+        // Enviar una solicitud GET al endpoint correspondiente para activar/desactivar la clase
+        fetch(`/auth/gymOwner/${action}/${classId}`)
+            .then(response => {
+                if (response.ok) {
+                    // Recargar la página después de activar/desactivar la clase con éxito
+                    window.location.reload();
+                } else {
+                    // Manejar errores si los hay
+                }
+            })
+            .catch(error => console.error('Error al cambiar el estado de la clase:', error));
+    });
 });
+
 document.querySelectorAll('.view-feedback-btn').forEach(btn => {
 	btn.addEventListener('click', function(event) {
 		event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
