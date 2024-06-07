@@ -220,12 +220,10 @@ public class GymUser {
     private Integer attendance;
 
     // Lista de lesiones o músculos lesionados del usuario.
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_injuries", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "injury")
+    @OneToMany(mappedBy = "gymUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Set<String> injuriesList = new HashSet<>();
-
+    private Set<UserInjuryStatus> injuryStatuses = new HashSet<>();
+    
     private Boolean churn;
 
     // Lista de gymBros.
