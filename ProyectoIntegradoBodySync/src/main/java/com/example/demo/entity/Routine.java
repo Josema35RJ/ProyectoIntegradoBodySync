@@ -2,9 +2,6 @@ package com.example.demo.entity;
 
 import java.util.List;
 
-import com.example.demo.model.GymUserModel;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

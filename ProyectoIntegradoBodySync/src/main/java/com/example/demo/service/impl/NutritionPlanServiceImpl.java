@@ -41,9 +41,9 @@ public class NutritionPlanServiceImpl implements NutritionPlanService {
     }
 
 	@Override
-	public NutritionPlan getNutritionPlan(int id) {
+	public NutritionPlanModel getNutritionPlan(int id) {
 		// TODO Auto-generated method stub
-		return nutritionPlanRepository.findById(id);
+		return nutritionPlanConverter.transform(nutritionPlanRepository.findById(id));
 	}
 
    

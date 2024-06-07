@@ -1,11 +1,15 @@
 package com.example.demo.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -218,26 +222,30 @@ public class OwnerController {
 
 	@GetMapping("/auth/gymUsers/attendanceStats")
 	public ResponseEntity<Map<String, Integer>> getAttendanceStats() {
-		Map<String, Integer> stats = new HashMap<>();
-		// Aquí debes rellenar el mapa 'stats' con los datos que necesitas.
-		// Por ejemplo, podrías contar la asistencia de los miembros por día de la
-		// semana.
-		for (String day : new String[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }) {
-			stats.put(day, gymUserRepository.countByAttendanceDaysContains(day));
-		}
-		return ResponseEntity.ok(stats);
+	    Map<String, Integer> stats = new HashMap<>();
+	    SimpleDateFormat sdf = new SimpleDateFormat("EEEE", new Locale("es", "ES"));
+
+	    // Días de la semana.
+	    for (String dia : new String[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }) {
+	        try {
+	            Date fechaDia = sdf.parse(dia);
+	            stats.put(dia, gymUserRepository.countByAttendanceDaysContains(fechaDia));
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return ResponseEntity.ok(stats);
 	}
 
-	
-
 	@PostMapping("/gymUser/delete/{id}")
-	public String deleteGymUser(@PathVariable("id") int id, RedirectAttributes flash) {
+	public String deleteGymUser(@PathVariable("id") int id, RedirectAttributes flash, HttpServletRequest request) {
 		if (gymUserService.eliminarGymUser(id)) {
 			flash.addFlashAttribute("message", "Usuario eliminado con éxito");
 		} else {
 			flash.addFlashAttribute("error", "No se pudo eliminar el usuario");
 		}
-		return GESTIONMIEMBROS_VIEW;
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@GetMapping("/auth/gymOwner/viewAchievements/{id}")

@@ -28,7 +28,10 @@ import com.example.demo.entity.GymClass;
 import com.example.demo.entity.GymUser;
 import com.example.demo.entity.NutritionPlan;
 import com.example.demo.entity.Routine;
+import com.example.demo.model.ExerciseModel;
 import com.example.demo.model.GymUserModel;
+import com.example.demo.model.NutritionPlanModel;
+import com.example.demo.model.RoutineModel;
 import com.example.demo.repository.GymUserRepository;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.AchievementService;
@@ -165,10 +168,10 @@ public class InstructorController {
 	public String asignarExercise(@RequestParam(value = "userId", required = false) Integer userId,
 			@RequestParam("exerciseId") int exerciseId, HttpServletRequest request) {
 
-		Exercise exercise = exerciseService.getExercise(exerciseId);
+		ExerciseModel exercise = exerciseService.getExercise(exerciseId);
 		GymUserModel gymUser = gymUserService.getGymUserById(userId);
 		if ( exercise != null) {
-			List<Exercise> exercises = gymUser.getExercises();
+			List<ExerciseModel> exercises = gymUser.getExercises();
 			exercises.add(exercise);
 			gymUser.setExercises(exercises);
 			// Guardar los cambios en la base de datos
@@ -280,7 +283,7 @@ public class InstructorController {
                                  HttpServletRequest request) {
        
         GymUserModel gymUser = gymUserService.getGymUserById(userId);
-        Routine routine = routineService.getById(routineId);
+        RoutineModel routine = routineService.getById(routineId);
 
         if (gymUser != null && routine != null) {
            gymUser.getRoutines().add(routine);
@@ -310,12 +313,12 @@ public class InstructorController {
 		GymUserModel gymUser = gymUserService.getGymUserById(userId);
 
 		// Obtener el plan de nutrición de la base de datos
-		NutritionPlan nutritionPlan = nutritionPlanService.getNutritionPlan(planId);
+		NutritionPlanModel nutritionPlan = nutritionPlanService.getNutritionPlan(planId);
 
 		// Verificar si el usuario y el plan existen
 		if (gymUser != null && nutritionPlan != null) {
 			// Agregar el plan de nutrición a la lista del usuario
-			List<NutritionPlan> nutritionPlans = gymUser.getNutritionPlans();
+			List<NutritionPlanModel> nutritionPlans = gymUser.getNutritionPlans();
 			nutritionPlans.add(nutritionPlan);
 			gymUser.setNutritionPlans(nutritionPlans);
 

@@ -163,7 +163,7 @@ public class GymUser {
     @CollectionTable(name = "attendance_days", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "day")
     @ToString.Exclude
-    private Set<String> attendanceDays = new HashSet<>();
+    private Set<Date> attendanceDays = new HashSet<>();
 
     // Fecha de creación del registro del miembro.
     @CreatedDate
@@ -214,6 +214,7 @@ public class GymUser {
     // Lista de registros de dolor muscular del usuario.
     @OneToMany()
     @ToString.Exclude
+    
     private List<MusclePainLog> musclePainLogs = new ArrayList<>();
 
     // Asistencia del usuario.
@@ -223,18 +224,18 @@ public class GymUser {
     @OneToMany(mappedBy = "gymUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<UserInjuryStatus> injuryStatuses = new HashSet<>();
-    
+
     private Boolean churn;
 
-    // Lista de gymBros.
-    @ManyToMany
+ // Lista de compañeros de gimnasio del usuario.
+    @OneToMany
     @JoinTable(
         name = "gym_bros",
-        joinColumns = @JoinColumn(name = "gym_user_id"),
-        inverseJoinColumns = @JoinColumn(name = "gym_bro_id")
+        joinColumns = @JoinColumn(name = "gym_user_id")
     )
     @ToString.Exclude
     private List<GymUser> gymBros = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "gymUser")
     @JsonManagedReference

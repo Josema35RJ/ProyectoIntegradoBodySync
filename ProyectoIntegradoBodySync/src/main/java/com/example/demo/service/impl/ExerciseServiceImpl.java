@@ -42,9 +42,9 @@ public class ExerciseServiceImpl implements ExerciseService {
 	}
 
 	@Override
-	public Exercise getExercise(int id) {
+	public ExerciseModel getExercise(int id) {
 		
-	    return exerciseRepository.findById(id).get();
+	    return exerciseConverter.transform(exerciseRepository.findById(id).get());
 	}
 
 }

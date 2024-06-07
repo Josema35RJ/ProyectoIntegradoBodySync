@@ -13,6 +13,6 @@ public interface ExerciseService {
 
 	void update(Exercise exercise);
 
-	 Exercise getExercise(int id);
+	 ExerciseModel getExercise(int id);
 
 }

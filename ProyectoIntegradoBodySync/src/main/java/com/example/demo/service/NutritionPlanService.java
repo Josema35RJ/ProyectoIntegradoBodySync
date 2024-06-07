@@ -12,6 +12,6 @@ public interface NutritionPlanService {
 
 	void save(NutritionPlan plan);
 
-	NutritionPlan getNutritionPlan(int id);
+	NutritionPlanModel getNutritionPlan(int id);
 }
 

@@ -1,13 +1,12 @@
 package com.example.demo.repository;
 
-import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.GymUser;
-import com.example.demo.model.GymUserModel;
 
 @Repository("gymUserRepository")
 public interface GymUserRepository extends JpaRepository<GymUser, Integer> {
@@ -21,7 +20,7 @@ public interface GymUserRepository extends JpaRepository<GymUser, Integer> {
 
 	 List<GymUser> findByRole( String role);
 
-	Integer countByAttendanceDaysContains(String day);
+	Integer countByAttendanceDaysContains(Date day);
 
 	Integer countByEnabledAndRole(boolean b, String role);
 

@@ -1,12 +1,14 @@
 package com.example.demo.converter;
 
-import com.example.demo.model.GymUserModel;
-import org.springframework.stereotype.Service;
-import smile.data.DataFrame;
-import smile.data.vector.IntVector;
-import smile.data.vector.FloatVector;
-
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.model.GymUserModel;
+
+import smile.data.DataFrame;
+import smile.data.vector.FloatVector;
+import smile.data.vector.IntVector;
 
 @Service
 public class GymUserToDataFrameConverter {

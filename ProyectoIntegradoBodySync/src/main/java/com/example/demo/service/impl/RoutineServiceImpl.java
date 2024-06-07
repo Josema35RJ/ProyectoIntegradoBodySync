@@ -10,6 +10,7 @@ import com.example.demo.converter.GymUserConverter;
 import com.example.demo.converter.RoutineConverter;
 import com.example.demo.entity.Routine;
 import com.example.demo.model.GymUserModel;
+import com.example.demo.model.RoutineModel;
 import com.example.demo.repository.RoutineRepository;
 import com.example.demo.service.RoutineService;
 
@@ -53,9 +54,9 @@ public class RoutineServiceImpl implements RoutineService{
 	}
 
 	@Override
-	public Routine getById(int id) {
+	public RoutineModel getById(int id) {
 		// TODO Auto-generated method stub
-		return routineRepository.findById(id).orElse(null);
+		return routineConverter.transform(routineRepository.findById(id).get());
 	}
 
 

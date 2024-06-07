@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -9,17 +10,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.example.demo.entity.Achievement;
-import com.example.demo.entity.ClassReservation;
-import com.example.demo.entity.Exercise;
-import com.example.demo.entity.GymClass;
 import com.example.demo.entity.GymUser;
-import com.example.demo.entity.MealLog;
-import com.example.demo.entity.MusclePainLog;
-import com.example.demo.entity.NutritionPlan;
-import com.example.demo.entity.Routine;
-import com.example.demo.entity.Speciality;
-import com.example.demo.entity.WorkoutLog;
+import com.example.demo.entity.UserInjury;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -40,6 +33,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.ToString;
 
 public class GymUserModel {
 
@@ -136,7 +130,7 @@ public class GymUserModel {
 
 	// Lista de especialidades del instructor.
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Speciality> specialtyList;
+	private List<SpecialityModel> specialtyList;
 
 	// Nombre del gimnasio del propietario.
 	@Size(max = 500)
@@ -157,40 +151,49 @@ public class GymUserModel {
 	private LocalDateTime updatedDate;
 
 	// Lista de rutinas del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<Routine> routines;
+	@OneToMany()
+	@JsonManagedReference
+	private List<RoutineModel> routines;
 
 	// Lista de ejercicios del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<Exercise> exercises;
+	@OneToMany()
+	@JsonManagedReference
+	private List<ExerciseModel> exercises;
 
 	// Lista de planes de nutrición del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<NutritionPlan> nutritionPlans;
+	@OneToMany()
+	@JsonManagedReference
+	private List<NutritionPlanModel> nutritionPlans;
 
 	// Lista de logros del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<Achievement> achievements;
+	@OneToMany()
+	@JsonManagedReference
+	private List<AchievementModel> achievements;
 
 	// Lista de reservas de clases del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<ClassReservation> classReservations;
+	@OneToMany()
+	@JsonManagedReference
+	private List<ClassReservationModel> classReservations;
 
 	// Lista de registros de entrenamiento del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<WorkoutLog> workoutLogs;
+	@OneToMany()
+	@JsonManagedReference
+	private List<WorkoutLogModel> workoutLogs;
 
 	// Lista de registros de comidas del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<MealLog> mealLogs;
+	@OneToMany()
+	@JsonManagedReference
+	private List<MealLogModel> mealLogs;
 
 	// Lista de registros de dolor muscular del usuario.
-	@OneToMany(mappedBy = "gymUser")
-	private List<MusclePainLog> musclePainLogs;
+	@OneToMany()
+	@JsonManagedReference
+	private List<MusclePainLogModel> musclePainLogs;
 
 	// Lista de clases a las que está inscrito el miembro.
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<GymClass> enrolledClasses;
+	@JsonManagedReference
+	private Set<GymClassModel> enrolledClasses;
 
 	// Estado de los pagos del miembro.
 	@Column(name = "payment_status")
@@ -206,7 +209,7 @@ public class GymUserModel {
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "user_injuries", joinColumns = @JoinColumn(name = "user_id"))
 	@Column(name = "injury")
-	private Set<String> injuriesList;
+	private Set<UserInjury> injuriesList;
 
 	private Boolean churn;
 
@@ -214,17 +217,20 @@ public class GymUserModel {
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "attendance_days", joinColumns = @JoinColumn(name = "user_id"))
 	@Column(name = "day")
-	private Set<String> attendanceDays;
+	private Set<Date> attendanceDays;
 	
-	// Lista de gymBros.
-		@ManyToMany
-	    @JoinTable(
-	        name = "gym_bros",
-	        joinColumns = @JoinColumn(name = "gym_user_id"),
-	        inverseJoinColumns = @JoinColumn(name = "gym_bro_id")
-	    )
-	    private List<GymUser> gymBros;
+	 // Lista de compañeros de gimnasio del usuario.
+    @OneToMany
+    @JoinTable(
+        name = "gym_bros",
+        joinColumns = @JoinColumn(name = "gym_user_id")
+    )
+    @ToString.Exclude
+    private List<GymUser> gymBros = new ArrayList<>();
 
+
+	private String token;
+	
 	public GymUserModel() {
 		super();
 	}
@@ -279,7 +285,7 @@ public class GymUserModel {
 			@Positive(message = "The height must be a positive number") Float height,
 			@NotBlank(message = "The activity level is required") String activityLevel,
 			@NotBlank(message = "The fitness goal is required") String goal, @Size(max = 500) String biography,
-			@NotEmpty(message = "Specialties list cannot be empty") List<Speciality> specialtyList,
+			@NotEmpty(message = "Specialties list cannot be empty") List<SpecialityModel> specialtyList,
 			@Size(max = 500) String gymName, @Size(max = 500) String gymLocation) {
 		super();
 		this.id = id;
@@ -449,11 +455,11 @@ public class GymUserModel {
 		this.biography = biography;
 	}
 
-	public List<Speciality> getSpecialtyList() {
+	public List<SpecialityModel> getSpecialtyList() {
 		return specialtyList;
 	}
 
-	public void setSpecialtyList(List<Speciality> specialtyList) {
+	public void setSpecialtyList(List<SpecialityModel> specialtyList) {
 		this.specialtyList = specialtyList;
 	}
 
@@ -473,75 +479,75 @@ public class GymUserModel {
 		this.gymLocation = gymLocation;
 	}
 
-	public List<Routine> getRoutines() {
+	public List<RoutineModel> getRoutines() {
 		return routines;
 	}
 
-	public void setRoutines(List<Routine> routines) {
+	public void setRoutines(List<RoutineModel> routines) {
 		this.routines = routines;
 	}
 
-	public List<Exercise> getExercises() {
+	public List<ExerciseModel> getExercises() {
 		return exercises;
 	}
 
-	public void setExercises(List<Exercise> exercises) {
+	public void setExercises(List<ExerciseModel> exercises) {
 		this.exercises = exercises;
 	}
 
-	public List<NutritionPlan> getNutritionPlans() {
+	public List<NutritionPlanModel> getNutritionPlans() {
 		return nutritionPlans;
 	}
 
-	public void setNutritionPlans(List<NutritionPlan> nutritionPlans) {
+	public void setNutritionPlans(List<NutritionPlanModel> nutritionPlans) {
 		this.nutritionPlans = nutritionPlans;
 	}
 
-	public List<Achievement> getAchievements() {
+	public List<AchievementModel> getAchievements() {
 		return achievements;
 	}
 
-	public void setAchievements(List<Achievement> achievements) {
+	public void setAchievements(List<AchievementModel> achievements) {
 		this.achievements = achievements;
 	}
 
-	public List<ClassReservation> getClassReservations() {
+	public List<ClassReservationModel> getClassReservations() {
 		return classReservations;
 	}
 
-	public void setClassReservations(List<ClassReservation> classReservations) {
+	public void setClassReservations(List<ClassReservationModel> classReservations) {
 		this.classReservations = classReservations;
 	}
 
-	public List<WorkoutLog> getWorkoutLogs() {
+	public List<WorkoutLogModel> getWorkoutLogs() {
 		return workoutLogs;
 	}
 
-	public void setWorkoutLogs(List<WorkoutLog> workoutLogs) {
+	public void setWorkoutLogs(List<WorkoutLogModel> workoutLogs) {
 		this.workoutLogs = workoutLogs;
 	}
 
-	public List<MealLog> getMealLogs() {
+	public List<MealLogModel> getMealLogs() {
 		return mealLogs;
 	}
 
-	public void setMealLogs(List<MealLog> mealLogs) {
+	public void setMealLogs(List<MealLogModel> mealLogs) {
 		this.mealLogs = mealLogs;
 	}
 
-	public List<MusclePainLog> getMusclePainLogs() {
+	public List<MusclePainLogModel> getMusclePainLogs() {
 		return musclePainLogs;
 	}
 
-	public void setMusclePainLogs(List<MusclePainLog> musclePainLogs) {
+	public void setMusclePainLogs(List<MusclePainLogModel> musclePainLogs) {
 		this.musclePainLogs = musclePainLogs;
 	}
 
-	public Set<GymClass> getEnrolledClasses() {
+	public Set<GymClassModel> getEnrolledClasses() {
 		return enrolledClasses;
 	}
 
-	public void setEnrolledClasses(Set<GymClass> enrolledClasses) {
+	public void setEnrolledClasses(Set<GymClassModel> enrolledClasses) {
 		this.enrolledClasses = enrolledClasses;
 	}
 
@@ -561,11 +567,11 @@ public class GymUserModel {
 		this.debt = debt;
 	}
 
-	public Set<String> getAttendanceDays() {
+	public Set<Date> getAttendanceDays() {
 		return attendanceDays;
 	}
 
-	public void setAttendanceDays(Set<String> attendanceDays) {
+	public void setAttendanceDays(Set<Date> attendanceDays) {
 		this.attendanceDays = attendanceDays;
 	}
 
@@ -585,8 +591,6 @@ public class GymUserModel {
 		this.attendance = attendance;
 	}
 
-	
-
 	public LocalDateTime getUpdatedDate() {
 		return updatedDate;
 	}
@@ -603,11 +607,11 @@ public class GymUserModel {
 		this.paymentStatus = paymentStatus;
 	}
 
-	public Set<String> getInjuriesList() {
+	public Set<UserInjury> getInjuriesList() {
 		return injuriesList;
 	}
 
-	public void setInjuriesList(Set<String> injuriesList) {
+	public void setInjuriesList(Set<UserInjury> injuriesList) {
 		this.injuriesList = injuriesList;
 	}
 
@@ -627,6 +631,14 @@ public class GymUserModel {
 		this.gymBros = gymBros;
 	}
 
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	@Override
 	public String toString() {
 		return "GymUserModel [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dni=" + dni
@@ -635,13 +647,12 @@ public class GymUserModel {
 				+ ", height=" + height + ", activityLevel=" + activityLevel + ", goal=" + goal + ", deleted=" + deleted
 				+ ", enabled=" + enabled + ", biography=" + biography + ", specialtyList=" + specialtyList
 				+ ", gymName=" + gymName + ", gymLocation=" + gymLocation + ", createdDate=" + createdDate
-				+ ", updatedDate=" + updatedDate + ", exercises=" + exercises
+				+ ", updatedDate=" + updatedDate + ", routines=" + routines + ", exercises=" + exercises
 				+ ", nutritionPlans=" + nutritionPlans + ", achievements=" + achievements + ", classReservations="
 				+ classReservations + ", workoutLogs=" + workoutLogs + ", mealLogs=" + mealLogs + ", musclePainLogs="
 				+ musclePainLogs + ", enrolledClasses=" + enrolledClasses + ", paymentStatus=" + paymentStatus
 				+ ", debt=" + debt + ", attendance=" + attendance + ", injuriesList=" + injuriesList + ", churn="
-				+ churn + ", attendanceDays=" + attendanceDays + "]";
+				+ churn + ", attendanceDays=" + attendanceDays + ", gymBros=" + gymBros + ", token=" + token + "]";
 	}
 
-	
 }

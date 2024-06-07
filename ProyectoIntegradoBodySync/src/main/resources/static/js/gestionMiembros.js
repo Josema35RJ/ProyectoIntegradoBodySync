@@ -96,3 +96,41 @@ document.getElementById('cityFilter').addEventListener('input', filterMembers);
             }
         });
     }, 30000); // 30000 milisegundos = 30 segundos
+    // Función para generar la paginación
+function generatePagination(totalItems, itemsPerPage) {
+    // Eliminar la paginación anterior si existe
+    $('#pagination').empty();
+
+    // Calcular el número total de páginas
+    var totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    // Agregar botón 'Anterior'
+    $('#pagination').append('<li class="page-item"><a class="page-link" href="#" onclick="previousPage()">Anterior</a></li>');
+
+    // Agregar botones de página
+    for (var i = 1; i <= totalPages; i++) {
+        $('#pagination').append('<li class="page-item"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>');
+    }
+
+    // Agregar botón 'Siguiente'
+    $('#pagination').append('<li class="page-item"><a class="page-link" href="#" onclick="nextPage()">Siguiente</a></li>');
+}
+
+// Funciones para cambiar de página
+function changePage(page) {
+    // Implementa lógica para mostrar la página 'page'
+}
+
+function previousPage() {
+    // Implementa lógica para mostrar la página anterior
+}
+
+function nextPage() {
+    // Implementa lógica para mostrar la página siguiente
+}
+
+// Llama a esta función para generar la paginación cuando la página cargue
+$(document).ready(function () {
+    // Supongamos que 'totalItems' es el número total de miembros y 'itemsPerPage' es la cantidad de tarjetas que deseas mostrar por página
+    generatePagination(totalItems, itemsPerPage);
+});

@@ -50,6 +50,10 @@
 
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Gestion de Miembros</h1>
+		
+		   <nav id="pagination" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center"></ul>
+        </nav>
 		<div class="row g-4" id="memberCards">
 			<!-- Filtros -->
 			<div class="container my-4">
@@ -124,8 +128,6 @@
 										<hr>
 										<div class="btn-group" role="group"
 											aria-label="Acciones del Miembro">
-											<a th:href="@{/gymUser/viewProfile/{id}(id=${miembro.id})}"
-												class="btn btn-primary btn-sm">Ver Perfil</a>
 											<form
 												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
 												method="post">
