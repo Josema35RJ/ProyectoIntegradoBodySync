@@ -84,7 +84,6 @@ public class OwnerController {
 
 	@GetMapping("/auth/gymOwner/ownerPanel")
 	public String OwnerPanel() {
-
 		return OWNERPANEL_VIEW;
 	}
 
@@ -128,7 +127,7 @@ public class OwnerController {
 	public String activateDesativar(@PathVariable int id, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 		 gymUserService.activarDesactivar(id);
-		
+		 redirectAttributes.addFlashAttribute("success", "Instructor desactivado con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}

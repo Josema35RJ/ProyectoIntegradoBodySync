@@ -8,11 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.ClassFeedbackModel;
 import com.example.demo.service.ClassFeedbackService;
 import com.example.demo.service.GymClassService;
 import com.example.demo.service.GymUserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class GymClassController {
@@ -34,9 +37,12 @@ public class GymClassController {
 	private ClassFeedbackService classFeedbackService;
 
     @GetMapping("/auth/gymOwner/deleteClass/{id}")
-    public String deleteClass(@PathVariable int id) {
+    public String deleteClass(@PathVariable int id, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    	
         gymClassService.deleteClass(id);
-        return "redirect:/auth/gymOwner/GestionClases";
+        redirectAttributes.addFlashAttribute("success", "Instructor desactivado con éxito");
+        String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
     }
     
     @GetMapping("/auth/gymOwner/viewFeedback/{Id}")
