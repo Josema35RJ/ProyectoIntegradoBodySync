@@ -15,24 +15,38 @@ document.addEventListener("DOMContentLoaded", function() {
         var firstName = button.getAttribute('data-firstName');
         var lastName = button.getAttribute('data-lastName');
         var dni = button.getAttribute('data-dni');
-        var username = button.getAttribute('data-email');
+        var username = button.getAttribute('data-username');
         var biography = button.getAttribute('data-biography');
         var city = button.getAttribute('data-city');
         var province = button.getAttribute('data-province');
         var postalCode = button.getAttribute('data-postalCode');
-        var role = button.getAttribute('data-role'); // Aquí se corrigió 'data-role'
+        var role = button.getAttribute('data-role');
+         var password = button.getAttribute('data-password');
 
         document.getElementById('editInstructorId').value = id;
         document.getElementById('editFirstName').value = firstName;
         document.getElementById('editLastName').value = lastName;
         document.getElementById('editDni').value = dni;
-        document.getElementById('editEmail').value = username;
+        document.getElementById('editUsername').value = username;
         document.getElementById('editBiography').value = biography;
         document.getElementById('editCity').value = city;
         document.getElementById('editProvince').value = province;
         document.getElementById('editPostalCode').value = postalCode;
         document.getElementById('editRole').value = role;
+        document.getElementById('editPassword').value = password;
+
+        // Mostrar el modal después de llenar los datos
+        var modal = new bootstrap.Modal(document.getElementById('editInstructorModal'));
+        modal.show();
     }
+
+    // Asignar la función de rellenar y mostrar el modal a todos los botones de editar
+    var editButtons = document.querySelectorAll('.edit-button');
+    editButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            fillEditInstructorModal(button);
+        });
+    });
 
     mostrarErrores();
 

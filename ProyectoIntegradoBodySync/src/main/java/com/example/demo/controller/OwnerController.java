@@ -282,11 +282,12 @@ public class OwnerController {
 	}
 
 	@PostMapping("/auth/gymOwner/instructors/edit")
-	public String editInstructor(@ModelAttribute GymUserModel instructor) {
+	public String editInstructor(@ModelAttribute GymUserModel instructor, HttpServletRequest request) {
 	
 		gymUserService.updateUser(instructor);
 		
-		return "redirect:" + GESTIONINSTRUCTORES_VIEW;
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 	
 	@PostMapping("/auth/gymOwner/register")

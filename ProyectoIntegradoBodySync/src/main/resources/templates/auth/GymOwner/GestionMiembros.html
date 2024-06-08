@@ -50,10 +50,7 @@
 
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Gestion de Miembros</h1>
-		
-		   <nav id="pagination" aria-label="Page navigation example">
-            <ul class="pagination justify-content-center"></ul>
-        </nav>
+	
 		<div class="row g-4" id="memberCards">
 			<!-- Filtros -->
 			<div class="container my-4">
@@ -86,9 +83,8 @@
 				<div class="tab-content mt-4">
 					<!-- Active Members Tab -->
 					<!-- Pestaña de miembros activos -->
-					<div class="tab-pane fade show active" id="active" role="tabpanel"
-						aria-labelledby="active-tab">
-						<div class="member-container">
+					<div class="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="active-tab">
+    <div class="member-container row row-cols-1 row-cols-md-3 g-4">
 							<!-- Bucle para miembros activos -->
 							<div th:each="miembro : ${activeMembers}" class="col-md-4 mb-4">
 								<div class="card member-card shadow-sm">
@@ -159,9 +155,8 @@
 						</div>
 					</div>
 					<!-- Pestaña de miembros inactivos -->
-					<div class="tab-pane fade" id="inactive" role="tabpanel"
-						aria-labelledby="inactive-tab">
-						<div class="member-container">
+				<div class="tab-pane fade" id="inactive" role="tabpanel" aria-labelledby="inactive-tab">
+    <div class="member-container row row-cols-1 row-cols-md-3 g-4">
 							<!-- Bucle para miembros inactivos -->
 							<div th:each="miembro : ${inactiveMembers}" class="col-md-4 mb-4">
 								<div class="card member-card shadow-sm bg-light">
@@ -235,7 +230,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>	
 
 		<div class="container mt-4">
 			<!-- Contenedor para las gráficas -->

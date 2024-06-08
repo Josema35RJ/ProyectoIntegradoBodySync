@@ -176,7 +176,7 @@ public class GymUser {
     private LocalDateTime updatedDate;
 
     // Lista de rutinas del usuario.
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany( cascade = CascadeType.ALL)
     @JsonManagedReference
     @ToString.Exclude
     private List<Routine> routines = new ArrayList<>();
@@ -221,7 +221,7 @@ public class GymUser {
     private Integer attendance;
 
     // Lista de lesiones o músculos lesionados del usuario.
-    @OneToMany(mappedBy = "gymUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "gymUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<UserInjuryStatus> injuryStatuses = new HashSet<>();
 
