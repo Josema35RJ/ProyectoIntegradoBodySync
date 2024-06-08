@@ -7,11 +7,11 @@ import com.example.demo.model.ExerciseModel;
 
 public interface ExerciseService {
 
-	 List<Exercise> ListExercise ();
+	 List<ExerciseModel> ListExercise ();
 
-	void create(Exercise exercise);
+	void create(ExerciseModel exercise);
 
-	void update(Exercise exercise);
+	void update(ExerciseModel exercise);
 
 	 ExerciseModel getExercise(int id);
 

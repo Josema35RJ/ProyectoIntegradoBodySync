@@ -39,5 +39,51 @@ public class RoutineModel {
 	// Referencia al usuario del gimnasio al que pertenece el ejercicio.
 	@ManyToOne
 	@JoinColumn(name = "gym_user_id")
-	private GymUser gymUser;
+	private GymUserModel gymUser;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<Exercise> getExerciseList() {
+		return exerciseList;
+	}
+
+	public void setExerciseList(List<Exercise> exerciseList) {
+		this.exerciseList = exerciseList;
+	}
+
+	public int getDaysPerWeek() {
+		return daysPerWeek;
+	}
+
+	public void setDaysPerWeek(int daysPerWeek) {
+		this.daysPerWeek = daysPerWeek;
+	}
+
+	public GymUserModel getGymUser() {
+		return gymUser;
+	}
+
+	public void setGymUser(GymUserModel gymUser) {
+		this.gymUser = gymUser;
+	}
+
+	@Override
+	public String toString() {
+		return "RoutineModel [id=" + id + ", name=" + name + ", exerciseList=" + exerciseList + ", daysPerWeek="
+				+ daysPerWeek + ", gymUser=" + gymUser + "]";
+	}
 }

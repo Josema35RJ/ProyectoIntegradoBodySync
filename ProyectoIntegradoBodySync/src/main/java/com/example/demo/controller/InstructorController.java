@@ -29,6 +29,7 @@ import com.example.demo.entity.GymUser;
 import com.example.demo.entity.NutritionPlan;
 import com.example.demo.entity.Routine;
 import com.example.demo.model.ExerciseModel;
+import com.example.demo.model.GymClassModel;
 import com.example.demo.model.GymUserModel;
 import com.example.demo.model.NutritionPlanModel;
 import com.example.demo.model.RoutineModel;
@@ -114,7 +115,7 @@ public class InstructorController {
 		int instructorId = userDetails.getId();
 
 		// Obtener las clases del instructor utilizando su ID
-		List<GymClass> gymClasses = gymClassService
+		List<GymClassModel> gymClasses = gymClassService
 				.getAllClassesFinByInstructorId(instructorService.getInstructorById(instructorId));
 
 		// Agregar los datos al modelo
@@ -129,7 +130,7 @@ public class InstructorController {
 	    session.setAttribute("classId", classId);
 
 	    // Obtener la clase según el ID
-	    GymClass gymClass = gymClassService.getClassById(classId);
+	    GymClassModel gymClass = gymClassService.getClassById(classId);
 
 	    // Obtener todos los miembros del gimnasio
 	    List<GymUserModel> members = gymUserService.ListAllGymUsers();
@@ -183,7 +184,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymInstructor/agregarExercise")
-	public String addExercise(@ModelAttribute Exercise exercise, HttpSession session, Model model,
+	public String addExercise(@ModelAttribute ExerciseModel exercise, HttpSession session, Model model,
 			HttpServletRequest request) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -196,7 +197,7 @@ public class InstructorController {
 			int userId = userDetails.getId();
 
 			// Asignar el ID del usuario al plan de nutrición
-			exercise.setGymUser(gymUserConverter.transform(gymUserService.getGymUserById(userId)));
+			exercise.setGymUser(gymUserService.getGymUserById(userId));
 
 		}
 		exerciseService.create(exercise);
@@ -205,7 +206,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymInstructor/updateExercise")
-	public String updateExercise(@ModelAttribute Exercise exercise, HttpSession session, Model model,
+	public String updateExercise(@ModelAttribute ExerciseModel exercise, HttpSession session, Model model,
 			HttpServletRequest request) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -218,7 +219,7 @@ public class InstructorController {
 			int userId = userDetails.getId();
 
 			// Asignar el ID del usuario al plan de nutrición
-			exercise.setGymUser(gymUserConverter.transform(gymUserService.getGymUserById(userId)));
+			exercise.setGymUser(gymUserService.getGymUserById(userId));
 
 		}
 		exerciseService.update(exercise);
@@ -236,7 +237,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymInstructor/agregarRoutine")
-	public String addRoutine(@ModelAttribute Routine routine, HttpSession session, Model model,
+	public String addRoutine(@ModelAttribute RoutineModel routine, HttpSession session, Model model,
 			HttpServletRequest request) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -248,7 +249,7 @@ public class InstructorController {
 			// Obtener el ID del usuario desde CustomUserDetails
 			int userId = userDetails.getId();
 			// Asignar el ID del usuario al plan de nutrición
-			routine.setGymUser(gymUserConverter.transform(gymUserService.getGymUserById(userId)));
+			routine.setGymUser(gymUserService.getGymUserById(userId));
 
 		}
 		routineService.create(routine);
@@ -257,7 +258,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymInstructor/updateRoutine")
-	public String updateRoutine(@ModelAttribute Routine routine, HttpSession session, Model model,
+	public String updateRoutine(@ModelAttribute RoutineModel routine, HttpSession session, Model model,
 			HttpServletRequest request) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -270,7 +271,7 @@ public class InstructorController {
 			int userId = userDetails.getId();
 
 			// Asignar el ID del usuario al plan de nutrición
-			routine.setGymUser(gymUserConverter.transform(gymUserService.getGymUserById(userId)));
+			routine.setGymUser(gymUserService.getGymUserById(userId));
 
 		}
 		routineService.update(routine);
@@ -332,7 +333,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymInstructor/agregarPlanNutricion")
-	public String addNutritionPlan(@ModelAttribute NutritionPlan plan, HttpServletRequest request) {
+	public String addNutritionPlan(@ModelAttribute NutritionPlanModel plan, HttpServletRequest request) {
 		// Obtener el usuario autenticado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -344,7 +345,7 @@ public class InstructorController {
 			int userId = userDetails.getId();
 
 			// Asignar el ID del usuario al plan de nutrición
-			plan.setGymUser(gymUserConverter.transform(gymUserService.getGymUserById(userId)));
+			plan.setGymUser(gymUserService.getGymUserById(userId));
 
 			// Asignar la fecha de creación
 			plan.setCreatedAt(LocalDateTime.now());
@@ -357,7 +358,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymInstructor/editarPlanNutricion")
-	public String editNutritionPlan(@ModelAttribute NutritionPlan plan, HttpServletRequest request) {
+	public String editNutritionPlan(@ModelAttribute NutritionPlanModel plan, HttpServletRequest request) {
 		// Obtener el usuario autenticado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -369,7 +370,7 @@ public class InstructorController {
 			int userId = userDetails.getId();
 
 			// Asignar el ID del usuario al plan de nutrición
-			plan.setGymUser(gymUserConverter.transform(gymUserService.getGymUserById(userId)));
+			plan.setGymUser(gymUserService.getGymUserById(userId));
 
 			// Asignar la fecha de actualización
 			plan.setUpdatedAt(LocalDateTime.now());
@@ -395,7 +396,7 @@ public class InstructorController {
 
 	@GetMapping("/auth/gymOwner/edit/{id}")
 	public String showUpdateForm(@PathVariable("id") int id, Model model) {
-		GymUser instructor = instructorService.getInstructorById(id);
+		GymUserModel instructor = instructorService.getInstructorById(id);
 		model.addAttribute("instructor", instructor);
 		return ADDINSTRUCTOR_VIEW;
 	}
@@ -479,7 +480,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymOwner/update/{id}")
-	public String updateInstructor(@PathVariable("id") int id, @ModelAttribute GymUser instructor) {
+	public String updateInstructor(@PathVariable("id") int id, @ModelAttribute GymUserModel instructor) {
 		instructorService.updateInstructor(instructor);
 		return "redirect:" + GESTIONINSTRUCTORES_VIEW;
 	}

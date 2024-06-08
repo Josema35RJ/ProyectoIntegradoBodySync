@@ -205,8 +205,12 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
 		return gymUserRepository.save(gymUser);
 	}
 
-	public List<GymUser> ListGymUsersByClassId(int classId) {
-        return gymUserRepository.findByEnrolledClasses_Id(classId);
+	public List<GymUserModel> ListGymUsersByClassId(int classId) {
+		List<GymUserModel> l = new ArrayList<>();
+		for(GymUser g : gymUserRepository.findByEnrolledClasses_Id(classId)) {
+			l.add(gymUserConverter.transform(g));
+		}
+        return l;
     }
 
 	@Override

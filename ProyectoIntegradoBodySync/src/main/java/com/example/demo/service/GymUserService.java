@@ -23,7 +23,7 @@ public interface GymUserService {
 	   public GymUserModel getGymUserById(int id);
 	   GymUser updateUser (GymUserModel gymUserModel);
 	   List<String> getEmails();
-	   List<GymUser> ListGymUsersByClassId(int classId);
+	   List<GymUserModel> ListGymUsersByClassId(int classId);
 	List<ExerciseModel> ListExercisesModelByGymUser(int id);
 	void setListExercisesModelByGymUser(List<ExerciseModel> exercises,int  id);
 	void addRoutineToUser(Integer userId, Routine routine);

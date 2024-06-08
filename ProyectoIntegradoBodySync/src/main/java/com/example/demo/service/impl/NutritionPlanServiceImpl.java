@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,23 @@ public class NutritionPlanServiceImpl implements NutritionPlanService {
 	    private NutritionPlanConverter nutritionPlanConverter;
 	  
 	@Override
-	public List<NutritionPlan> ListAllNutritionPlan() {
+	public List<NutritionPlanModel> ListAllNutritionPlan() {
 		// TODO Auto-generated method stub
-		
-		return nutritionPlanRepository.findAll();
+		List<NutritionPlanModel> l = new ArrayList<>();
+		for(NutritionPlan n : nutritionPlanRepository.findAll()) {
+			l.add(nutritionPlanConverter.transform(n));
+		}
+		return l;
 	}
 
 	@Override
-    public void save(NutritionPlan plan) {
-        nutritionPlanRepository.save(plan);
+    public void save(NutritionPlanModel plan) {
+        nutritionPlanRepository.save(nutritionPlanConverter.transform(plan));
     }
 
     @Override
-    public void update(NutritionPlan plan) {
-        nutritionPlanRepository.save(plan); 
+    public void update(NutritionPlanModel plan) {
+        nutritionPlanRepository.save(nutritionPlanConverter.transform(plan)); 
     }
 
 	@Override

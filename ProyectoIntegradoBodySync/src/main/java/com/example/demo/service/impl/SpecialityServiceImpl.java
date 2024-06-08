@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.converter.SpecialityConverter;
-import com.example.demo.entity.ClassFeedback;
 import com.example.demo.entity.Speciality;
+import com.example.demo.model.SpecialityModel;
 import com.example.demo.repository.SpecialityRepository;
 import com.example.demo.service.SpecialityService;
 
@@ -24,15 +25,19 @@ public class SpecialityServiceImpl implements SpecialityService {
 	private SpecialityConverter specialityConverter;
 
 	@Override
-	public List<Speciality> getAllISpecialities() {
+	public List<SpecialityModel> getAllISpecialities() {
 		// TODO Auto-generated method stub
-		return specialityRepository.findAll();
+		List<SpecialityModel> l = new ArrayList<>();
+		for(Speciality s : specialityRepository.findAll()) {
+			l.add(specialityConverter.transform(s));
+		}
+		return l;
 	}
 
 	@Override
-	public Speciality getSpecialityById(int id) {
+	public SpecialityModel getSpecialityById(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		return specialityConverter.transform(specialityRepository.findById(id).get());
 	}
 
 	@Override

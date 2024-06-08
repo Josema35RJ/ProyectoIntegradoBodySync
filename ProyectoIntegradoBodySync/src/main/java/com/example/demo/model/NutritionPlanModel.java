@@ -20,7 +20,7 @@ public class NutritionPlanModel {
 		// Usuario al que pertenece el plan de nutrición.
 		@ManyToOne
 		@NotNull(message = "GymUser is required")
-		private GymUser gymUser;
+		private GymUserModel gymUser;
 
 		// Nombre del plan de nutrición.
 		@NotBlank(message = "Name is required")
@@ -35,5 +35,59 @@ public class NutritionPlanModel {
 
 		// Fecha de última modificación del plan de nutrición.
 		private LocalDateTime updatedAt;
+
+		public Integer getId() {
+			return id;
+		}
+
+		public void setId(Integer id) {
+			this.id = id;
+		}
+
+		public GymUserModel getGymUser() {
+			return gymUser;
+		}
+
+		public void setGymUser(GymUserModel gymUser) {
+			this.gymUser = gymUser;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public LocalDateTime getCreatedAt() {
+			return createdAt;
+		}
+
+		public void setCreatedAt(LocalDateTime createdAt) {
+			this.createdAt = createdAt;
+		}
+
+		public LocalDateTime getUpdatedAt() {
+			return updatedAt;
+		}
+
+		public void setUpdatedAt(LocalDateTime updatedAt) {
+			this.updatedAt = updatedAt;
+		}
+
+		@Override
+		public String toString() {
+			return "NutritionPlanModel [id=" + id + ", gymUser=" + gymUser + ", name=" + name + ", description="
+					+ description + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+		}
 		
 }

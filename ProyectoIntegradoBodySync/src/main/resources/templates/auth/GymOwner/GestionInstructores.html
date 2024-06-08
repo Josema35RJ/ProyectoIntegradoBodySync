@@ -113,6 +113,10 @@
                 <button type="submit" class="btn btn-success btn-sm"
                         th:if="${!instructor.enabled}">Activar</button>
             </form>
+            <form th:action="@{/gymUser/delete/{id}(id=${instructor.id})}"
+												method="post">
+												<button type="submit" class="btn btn-danger btn-sm" th:if="${!instructor.enabled}">Eliminar</button>
+											</form>
             <form th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${instructor.id})}"
                   method="post" class="d-inline">
                 <input type="hidden" name="_method" value="put"/>

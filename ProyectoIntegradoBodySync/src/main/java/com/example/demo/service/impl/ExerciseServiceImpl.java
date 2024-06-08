@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +25,25 @@ public class ExerciseServiceImpl implements ExerciseService {
 	    private ExerciseConverter exerciseConverter;
 
 	@Override
-	public List<Exercise> ListExercise() {
+	public List<ExerciseModel> ListExercise() {
 		// TODO Auto-generated method stub
-		return exerciseRepository.findAll();
+		List<ExerciseModel> l = new ArrayList<>();
+		for(Exercise e: exerciseRepository.findAll()) {
+			l.add(exerciseConverter.transform(e));
+		}
+		return l;
 	}
 
 	@Override
-	public void create(Exercise exercise) {
+	public void create(ExerciseModel exercise) {
 		// TODO Auto-generated method stub
-		exerciseRepository.save(exercise);
+		exerciseRepository.save(exerciseConverter.transform(exercise));
 	}
 
 	@Override
-	public void update(Exercise exercise) {
+	public void update(ExerciseModel exercise) {
 		// TODO Auto-generated method stub
-		exerciseRepository.save(exercise);
+		exerciseRepository.save(exerciseConverter.transform(exercise));
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,9 +27,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.converter.GymUserToDataFrameConverter;
-import com.example.demo.entity.ClassFeedback;
 import com.example.demo.entity.GymClass;
 import com.example.demo.entity.GymUser;
+import com.example.demo.model.ClassFeedbackModel;
+import com.example.demo.model.GymClassModel;
 import com.example.demo.model.GymUserModel;
 import com.example.demo.repository.GymUserRepository;
 import com.example.demo.service.ClassFeedbackService;
@@ -89,9 +89,11 @@ public class OwnerController {
 	}
 
 	@PostMapping("/auth/gymOwner/addClass")
-	public String addClass(@ModelAttribute GymClass gymClass, RedirectAttributes redirectAttributes,
+	public String addClass(@ModelAttribute GymClassModel gymClass, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 		gymClassService.addClass(gymClass);
+	 gymUserService.getGymUserById(gymClass.getInstructor().getId()).getEnrolledClasses().add(gymClass);
+
 		redirectAttributes.addFlashAttribute("message", "Clase creada con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -102,7 +104,7 @@ public class OwnerController {
 	public String editClass(@PathVariable int id, @ModelAttribute GymClass updatedClass, BindingResult result,
 			RedirectAttributes redirectAttributes, HttpServletRequest request) {
  
-		GymClass existingClass = gymClassService.getClassById(id);
+		GymClassModel existingClass = gymClassService.getClassById(id);
 		if (existingClass != null) {
 			existingClass.setName(updatedClass.getName());
 			existingClass.setDescription(updatedClass.getDescription());
@@ -115,6 +117,7 @@ public class OwnerController {
 			existingClass.setInstructor(existingClass.getInstructor());
 
 			gymClassService.updateClass(existingClass);
+			gymUserService.getGymUserById(existingClass.getInstructor().getId()).getEnrolledClasses().add(existingClass);
 			redirectAttributes.addFlashAttribute("success", "Clase actualizada con éxito");
 		} else {
 			redirectAttributes.addFlashAttribute("error", "Clase no encontrada");
@@ -134,8 +137,8 @@ public class OwnerController {
 
 	@GetMapping("/auth/gymOwner/getClassDetails/{id}")
 	@ResponseBody
-	public GymClass getClassDetails(@PathVariable int id) {
-		GymClass gymClass = gymClassService.getClassById(id);
+	public GymClassModel getClassDetails(@PathVariable int id) {
+		GymClassModel gymClass = gymClassService.getClassById(id);
 		return gymClass;
 	}
 
@@ -226,9 +229,9 @@ public class OwnerController {
 	}
 
 	@PostMapping("/auth/gymOwner/addFeedback")
-	public String addFeedback(@ModelAttribute ClassFeedback feedback) {
+	public String addFeedback(@ModelAttribute ClassFeedbackModel feedback) {
 		classFeedbackService.addFeedback(feedback);
-		return "redirect:/auth/gymOwner/GestionClases";
+		return "redirect:" + GESTIONCLASES_VIEW;
 	}
 
 	@GetMapping("/auth/gymOwner/addMember")
@@ -254,7 +257,7 @@ public class OwnerController {
 	public String GestionInstructores(Model model) {
 
 	    model.addAttribute("ListInstructores", instructorService.getAllInstructors());
-	    
+	    System.out.println(instructorService.getAllInstructors());
 	    return GESTIONINSTRUCTORES_VIEW;
 	}
 
@@ -265,19 +268,19 @@ public class OwnerController {
 
 	@GetMapping("/auth/gymOwner/instructors")
 	 @ResponseBody
-    public List<GymUser> getAllInstructors() {
+    public List<GymUserModel> getAllInstructors() {
         return instructorService.getAllInstructors();
     }
 
 	@GetMapping("/auth/gymOwner/asistencia")
-	public ResponseEntity<List<GymClass>> obtenerDatosAsistencia() {
-	    List<GymClass> asistenciaData = gymClassService.obtenerDatosAsistencia();
+	public ResponseEntity<List<GymClassModel>> obtenerDatosAsistencia() {
+	    List<GymClassModel> asistenciaData = gymClassService.obtenerDatosAsistencia();
 	    return ResponseEntity.ok(asistenciaData);
 	}
 
 	@GetMapping("/auth/gymOwner/popularidad")
-	public ResponseEntity<List<GymClass>> obtenerDatosPopularidad() {
-	    List<GymClass> popularidadData = gymClassService.obtenerDatosPopularidad();
+	public ResponseEntity<List<GymClassModel>> obtenerDatosPopularidad() {
+	    List<GymClassModel> popularidadData = gymClassService.obtenerDatosPopularidad();
 	    return ResponseEntity.ok(popularidadData);
 	}
 

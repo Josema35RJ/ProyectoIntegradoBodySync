@@ -7,10 +7,10 @@ import com.example.demo.model.GymUserModel;
 import com.example.demo.model.RoutineModel;
 
 public interface RoutineService {
-	Routine findByGymUser (GymUserModel gymUserModel);
-	 List<Routine> ListRoutine ();
-	void update(Routine routine);
-	void create(Routine routine);
+	RoutineModel findByGymUser (GymUserModel gymUserModel);
+	 List<RoutineModel> ListRoutine ();
+	void update(RoutineModel routine);
+	void create(RoutineModel routine);
 	RoutineModel getById(int id);
 
 }
