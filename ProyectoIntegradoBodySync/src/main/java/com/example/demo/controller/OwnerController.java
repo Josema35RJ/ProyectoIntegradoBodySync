@@ -119,8 +119,6 @@ public class OwnerController {
 			gymClassService.updateClass(existingClass);
 			gymUserService.getGymUserById(existingClass.getInstructor().getId()).getEnrolledClasses().add(existingClass);
 			redirectAttributes.addFlashAttribute("success", "Clase actualizada con éxito");
-		} else {
-			redirectAttributes.addFlashAttribute("error", "Clase no encontrada");
 		}
 		String referer = request.getHeader("Referer");	
 		return "redirect:" + referer;
@@ -285,14 +283,16 @@ public class OwnerController {
 	}
 
 	@PostMapping("/auth/gymOwner/instructors/edit")
-	public String editInstructor(@ModelAttribute GymUserModel instructor, HttpServletRequest request) {
-	
-		gymUserService.updateUser(instructor);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+	public String editInstructor(@ModelAttribute GymUserModel instructor, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	    gymUserService.updateUser(instructor);
+	    
+	    // Agregar un mensaje de éxito
+	    redirectAttributes.addFlashAttribute("success", "¡Instructor actualizado exitosamente!");
+
+	    String referer = request.getHeader("Referer");
+	    return "redirect:" + referer;
 	}
-	
+
 	@PostMapping("/auth/gymOwner/register")
 	public String registerSubmit(@ModelAttribute("gymUserModel") GymUserModel gymUserModel,
 			@RequestParam("confirmPassword") String confirmPassword, BindingResult result, RedirectAttributes flash, HttpServletRequest request) {
@@ -327,7 +327,7 @@ public class OwnerController {
 			return GESTIONINSTRUCTORES_VIEW;
 		} else {
 			gymUserService.registrar(gymUserModel);
-			flash.addFlashAttribute("success", "¡GymUser registrado exitosamente!");
+			flash.addFlashAttribute("success", "¡Instructor registrado exitosamente!");
 			String referer = request.getHeader("Referer");
 			
 			return "redirect:" + referer;

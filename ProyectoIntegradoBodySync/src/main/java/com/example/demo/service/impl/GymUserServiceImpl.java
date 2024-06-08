@@ -172,7 +172,9 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
 	@Override
 	public GymUser updateUser(GymUserModel gymUserModel) {
 		// TODO Auto-generated method stub
+		
 		GymUser gymUser = gymUserConverter.transform(gymUserModel);
+		gymUser.setEnabled(true);
 		gymUserRepository.save(gymUser);
 		return gymUser;
 	}

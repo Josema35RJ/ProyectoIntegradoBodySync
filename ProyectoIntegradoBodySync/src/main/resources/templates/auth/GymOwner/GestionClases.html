@@ -51,11 +51,10 @@
 		<div class="row g-4" id="classCards">
 			<button class="btn btn-success mb-3" data-bs-toggle="modal"
 				data-bs-target="#createNewClassModal">Añadir Nueva Clase</button>
-			<div th:if="${message}">
-				<div class="alert alert-success">
-					<p th:text="${message}"></p>
-				</div>
+			<div th:if="${success}" class="alert alert-success" role="alert">
+				<strong th:text="${success}"></strong>
 			</div>
+
 
 			<div class="container">
 				<div class="row">

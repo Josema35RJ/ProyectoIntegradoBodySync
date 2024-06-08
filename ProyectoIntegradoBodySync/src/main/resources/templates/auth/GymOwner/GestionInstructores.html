@@ -46,11 +46,15 @@
 			</div>
 		</div>
 	</nav>
-
 	<!-- Contenedor principal -->
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Gestión de Instructores</h1>
 		<div class="row g-4" id="instructorCards">
+			<div th:if="${success}" class="alert alert-success" role="alert">
+				<strong th:text="${success}"></strong>
+			</div>
+
+
 			<button class="btn btn-success mb-3" data-bs-toggle="modal"
 				data-bs-target="#addInstructorModal">Añadir Nuevo
 				Instructor</button>
@@ -107,22 +111,25 @@
             data-password=${instructor.password}"
 							data-bs-toggle="modal" data-bs-target="#editInstructorModal">
 							Editar</button>
-						  <form th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${instructor.id})}"
-                  method="post" class="d-inline">
-                <input type="hidden" name="_method" value="put"/>
-                <button type="submit" class="btn btn-success btn-sm"
-                        th:if="${!instructor.enabled}">Activar</button>
-            </form>
-            <form th:action="@{/gymUser/delete/{id}(id=${instructor.id})}"
-												method="post">
-												<button type="submit" class="btn btn-danger btn-sm" th:if="${!instructor.enabled}">Eliminar</button>
-											</form>
-            <form th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${instructor.id})}"
-                  method="post" class="d-inline">
-                <input type="hidden" name="_method" value="put"/>
-                <button type="submit" class="btn btn-danger btn-sm"
-                        th:if="${instructor.enabled}">Desactivar</button>
-            </form>
+						<form
+							th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${instructor.id})}"
+							method="post" class="d-inline">
+							<input type="hidden" name="_method" value="put" />
+							<button type="submit" class="btn btn-success btn-sm"
+								th:if="${!instructor.enabled}">Activar</button>
+						</form>
+						<form th:action="@{/gymUser/delete/{id}(id=${instructor.id})}"
+							method="post">
+							<button type="submit" class="btn btn-danger btn-sm"
+								th:if="${!instructor.enabled}">Eliminar</button>
+						</form>
+						<form
+							th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${instructor.id})}"
+							method="post" class="d-inline">
+							<input type="hidden" name="_method" value="put" />
+							<button type="submit" class="btn btn-danger btn-sm"
+								th:if="${instructor.enabled}">Desactivar</button>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -215,19 +222,12 @@
 									postal del instructor.</div>
 							</div>
 							<div class="mb-3">
-								<label for="instructorRole" class="form-label">Rol</label> <select
-									class="form-select" id="role" name="role" required>
-									<option value="ROL_GYMINSTRUCTOR">Instructor</option>
-								</select>
-								<div class="invalid-feedback">Por favor, selecciona el rol
-									del instructor.</div>
+								<input type="hidden" id="role" name="role"
+									value="ROL_GYMINSTRUCTOR">
 							</div>
 							<div class="mb-3">
-								<label for="editPassword" class="form-label">Contraseña</label>
-								<input type="password" class="form-control" id="editPassword"
+								<input type="hidden" class="form-control" id="editPassword"
 									name="password" required>
-								<div class="invalid-feedback">Por favor, ingresa la
-									contraseña del instructor.</div>
 							</div>
 							<button type="submit" class="btn btn-primary">Actualizar
 								Instructor</button>
@@ -295,10 +295,8 @@
 									name="postalCode" required>
 							</div>
 							<div class="mb-3">
-								<label for="instructorRole" class="form-label">Rol</label> <select
-									class="form-select" id="role" name="role" required>
-									<option value="ROL_GYMINSTRUCTOR">Instructor</option>
-								</select>
+								<input type="hidden" id="role" name="role"
+									value="ROL_GYMINSTRUCTOR">
 							</div>
 							<div class="mb-3">
 								<label for="instructorDni" class="form-label">DNI</label> <input

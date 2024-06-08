@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function() {
         var province = button.getAttribute('data-province');
         var postalCode = button.getAttribute('data-postalCode');
         var role = button.getAttribute('data-role');
-         var password = button.getAttribute('data-password');
 
         document.getElementById('editInstructorId').value = id;
         document.getElementById('editFirstName').value = firstName;
@@ -33,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('editProvince').value = province;
         document.getElementById('editPostalCode').value = postalCode;
         document.getElementById('editRole').value = role;
-        document.getElementById('editPassword').value = password;
 
         // Mostrar el modal después de llenar los datos
         var modal = new bootstrap.Modal(document.getElementById('editInstructorModal'));
