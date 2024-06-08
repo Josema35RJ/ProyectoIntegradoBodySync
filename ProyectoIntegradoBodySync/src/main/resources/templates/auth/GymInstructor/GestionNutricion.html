@@ -30,7 +30,7 @@
 					<li class="nav-item"><a class="nav-link active"
 						href="/auth/gymInstructor/GestionRutinas"><i
 							class="fas fa-calendar-alt"></i> Gestión de Rutinas</a></li>
-							<li class="nav-item"><a class="nav-link active"
+						<li class="nav-item"><a class="nav-link"
 						href="/auth/gymInstructor/GestionAchievement"><i
 							class="fas fa-trophy"></i> Gestión de Logros</a></li>
 					<li class="nav-item"><a class="nav-link"
@@ -50,6 +50,9 @@
    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#crearPlanModal">
         Agregar Nuevo Plan de Nutrición
     </button>
+    <div th:if="${success}" class="alert alert-success" role="alert">
+				<strong th:text="${success}"></strong>
+			</div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Iterar sobre la lista de planes de nutrición -->
         <div th:each="nutritionPlan : ${nutritionPlans}" class="col">

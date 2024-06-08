@@ -40,6 +40,9 @@
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Gestion de Miembros Instructor</h1>
 		<div class="row g-4" id="memberCards">
+		<div th:if="${success}" class="alert alert-success" role="alert">
+				<strong th:text="${success}"></strong>
+			</div>
 			<!-- Filtros -->
 			<div class="container my-4">
 				<div class="row g-3">

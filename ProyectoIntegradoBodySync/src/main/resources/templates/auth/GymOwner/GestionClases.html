@@ -81,6 +81,8 @@
 									<li class="list-group-item"
 										th:text="'Duración: ' + ${gymClass.duration}">Duración</li>
 									<li class="list-group-item"
+										th:text="'Dias de la Semana: ' + ${gymClass.daysOfWeek}">Duración</li>
+									<li class="list-group-item"
 										th:text="'Fecha de inicio: ' + ${gymClass.startDate}">Fecha
 										de inicio</li>
 									<li class="list-group-item"
@@ -98,7 +100,7 @@
 								</th:block>
 								<button class="btn btn-success mb-3 edit-btn"
 									data-bs-toggle="modal" data-bs-target="#editExistingClassModal"
-									th:attr="data-class-id=${gymClass.id}, data-class-name=${gymClass.name}, data-class-description=${gymClass.description}, data-class-instructor=${gymClass.instructor.id}, data-class-time=${gymClass.time}, data-class-capacity=${gymClass.maximumCapacity}, data-class-start-date=${gymClass.startDate}, data-class-end-date=${gymClass.endDate}, data-class-duration=${gymClass.duration}">
+									th:attr="data-class-id=${gymClass.id}, data-class-name=${gymClass.name}, data-class-description=${gymClass.description}, data-class-instructor=${gymClass.instructor.id}, data-class-time=${gymClass.time}, data-class-capacity=${gymClass.maximumCapacity}, data-class-start-date=${gymClass.startDate}, data-class-end-date=${gymClass.endDate}, data-class-duration=${gymClass.duration}, data-class-days-of-week=${gymClass.daysOfWeek}">
 									Editar Clase</button>
 								<button class="btn btn-warning mb-3 toggle-btn"
 									data-bs-toggle="modal" data-bs-target="#toggleClassModal"
@@ -269,14 +271,14 @@
 							<!-- Días de la semana -->
 							<div class="mb-3">
 								<label for="editClassDaysOfWeek" class="form-label">Días
-									de la semana</label> <select multiple class="form-control"
-									id="editClassDaysOfWeek" name="daysOfWeek" required>
-									<option value="0">Domingo</option>
-									<option value="1">Lunes</option>
-									<option value="2">Martes</option>
-									<option value="3">Miércoles</option>
-									<option value="4">Jueves</option>
-									<option value="5">Viernes</option>
+									de la semana (No seleccione ningun, para mantener mismos)</label> <select multiple class="form-control"
+									id="editClassDaysOfWeek" name="daysOfWeek">
+									<option value="0" >Domingo</option>
+									<option value="1" >Lunes</option>
+									<option value="2" >Martes</option>
+									<option value="3" >Miércoles</option>
+									<option value="4" >Jueves</option>
+									<option value="5" >Viernes</option>
 									<option value="6">Sábado</option>
 								</select>
 							</div>
@@ -303,9 +305,11 @@
 								<label for="editClassInstructor" class="form-label">Instructor</label>
 								<select class="form-control" id="newClassInstructor"
 									name="instructorId" required>
+									<option value="0">Sin Cambiar Instructor</option>
 									<option th:each="instructor : ${instructors}"
 										th:value="${instructor.id}"
 										th:text="${instructor.firstName} + ' ' + ${instructor.lastName}"></option>
+								
 								</select>
 							</div>
 							<button type="submit" class="btn btn-primary">Guardar

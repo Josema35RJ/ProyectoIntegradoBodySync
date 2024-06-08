@@ -131,10 +131,10 @@ public class InstructorController {
 
 	    // Obtener la clase según el ID
 	    GymClassModel gymClass = gymClassService.getClassById(classId);
-
+       
 	    // Obtener todos los miembros del gimnasio
 	    List<GymUserModel> members = gymUserService.ListAllGymUsers();
-        System.out.println(members);
+
 	    // Filtrar los miembros que están inscritos en la clase específica y dividirlos en activos e inactivos
 	    Map<Boolean, List<GymUserModel>> membersByActivity = members.stream()
 	            .filter(gymUser -> gymUser.getEnrolledClasses().contains(gymClass))
@@ -167,7 +167,7 @@ public class InstructorController {
 
 	@PostMapping("/auth/gymInstructor/asignarExercise")
 	public String asignarExercise(@RequestParam(value = "userId", required = false) Integer userId,
-			@RequestParam("exerciseId") int exerciseId, HttpServletRequest request) {
+			@RequestParam("exerciseId") int exerciseId, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
 		ExerciseModel exercise = exerciseService.getExercise(exerciseId);
 		GymUserModel gymUser = gymUserService.getGymUserById(userId);
@@ -178,14 +178,14 @@ public class InstructorController {
 			// Guardar los cambios en la base de datos
 			gymUserService.updateUser(gymUser);
 		}
-
+		 redirectAttributes.addFlashAttribute("success", "Ejercicio asignado con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymInstructor/agregarExercise")
 	public String addExercise(@ModelAttribute ExerciseModel exercise, HttpSession session, Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -201,13 +201,14 @@ public class InstructorController {
 
 		}
 		exerciseService.create(exercise);
+		 redirectAttributes.addFlashAttribute("success", "Ejercicio creado con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymInstructor/updateExercise")
 	public String updateExercise(@ModelAttribute ExerciseModel exercise, HttpSession session, Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -223,6 +224,7 @@ public class InstructorController {
 
 		}
 		exerciseService.update(exercise);
+		 redirectAttributes.addFlashAttribute("success", "Ejercicio actualizado con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
@@ -238,7 +240,7 @@ public class InstructorController {
 
 	@PostMapping("/auth/gymInstructor/agregarRoutine")
 	public String addRoutine(@ModelAttribute RoutineModel routine, HttpSession session, Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request,RedirectAttributes redirectAttributes) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -253,13 +255,14 @@ public class InstructorController {
 
 		}
 		routineService.create(routine);
+		 redirectAttributes.addFlashAttribute("success", "Rutina creada con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymInstructor/updateRoutine")
 	public String updateRoutine(@ModelAttribute RoutineModel routine, HttpSession session, Model model,
-			HttpServletRequest request) {
+			HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el ID de la clase almacenado en la sesión del usuario
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -275,13 +278,14 @@ public class InstructorController {
 
 		}
 		routineService.update(routine);
+		 redirectAttributes.addFlashAttribute("success", "Rutina actualizada con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymInstructor/asignarRoutine")
     public String asignarRoutine(@RequestParam("userId") int userId, @RequestParam("routineId") int routineId,
-                                 HttpServletRequest request) {
+                                 HttpServletRequest request, RedirectAttributes redirectAttributes) {
        
         GymUserModel gymUser = gymUserService.getGymUserById(userId);
         RoutineModel routine = routineService.getById(routineId);
@@ -293,7 +297,7 @@ public class InstructorController {
             
         }
 
-        System.out.println("GymUser: " + gymUser);
+   	 redirectAttributes.addFlashAttribute("success", "Rutina asignada con éxito");
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
@@ -309,7 +313,7 @@ public class InstructorController {
 
 	@PostMapping("/auth/gymInstructor/asignarPlanNutricion")
 	public String asignarPlanNutricion(@RequestParam("userId") int userId, @RequestParam("planId") int planId,
-			HttpServletRequest request) {
+			HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el usuario de la base de datos
 		GymUserModel gymUser = gymUserService.getGymUserById(userId);
 
@@ -328,12 +332,13 @@ public class InstructorController {
 		}
 
 		// Redirigir a la página anterior
+		redirectAttributes.addFlashAttribute("success", "Plan Nutricion asignado exitosamente.");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymInstructor/agregarPlanNutricion")
-	public String addNutritionPlan(@ModelAttribute NutritionPlanModel plan, HttpServletRequest request) {
+	public String addNutritionPlan(@ModelAttribute NutritionPlanModel plan, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el usuario autenticado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -353,12 +358,13 @@ public class InstructorController {
 			// Guardar el plan de nutrición
 			nutritionPlanService.save(plan);
 		}
+		redirectAttributes.addFlashAttribute("success", "Plan Nutricion actualizado exitosamente.");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymInstructor/editarPlanNutricion")
-	public String editNutritionPlan(@ModelAttribute NutritionPlanModel plan, HttpServletRequest request) {
+	public String editNutritionPlan(@ModelAttribute NutritionPlanModel plan, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el usuario autenticado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -377,13 +383,15 @@ public class InstructorController {
 		}
 
 		nutritionPlanService.update(plan);
+		redirectAttributes.addFlashAttribute("success", "Plan Nutricion actualizado exitosamente.");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymOwner/addInstructor")
-	public String addInstructor(@ModelAttribute GymUser instructor) {
+	public String addInstructor(@ModelAttribute GymUser instructor, RedirectAttributes redirectAttributes) {
 		gymUserService.registrar(gymUserConverter.transform(instructor));
+		redirectAttributes.addFlashAttribute("success", "Instructor creado exitosamente.");
 		return GESTIONINSTRUCTORES_VIEW;
 	}
 
@@ -395,9 +403,10 @@ public class InstructorController {
 	}
 
 	@GetMapping("/auth/gymOwner/edit/{id}")
-	public String showUpdateForm(@PathVariable("id") int id, Model model) {
+	public String showUpdateForm(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes) {
 		GymUserModel instructor = instructorService.getInstructorById(id);
 		model.addAttribute("instructor", instructor);
+		redirectAttributes.addFlashAttribute("success", "Instructor actualizado exitosamente.");
 		return ADDINSTRUCTOR_VIEW;
 	}
 
@@ -410,7 +419,7 @@ public class InstructorController {
 	}
 
 	@PostMapping("/auth/gymInstructor/agregarAchievement")
-	public String addAchievement(@ModelAttribute Achievement achievement, HttpServletRequest request) {
+	public String addAchievement(@ModelAttribute Achievement achievement, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el usuario autenticado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -427,15 +436,17 @@ public class InstructorController {
 			// Asignar la fecha de creación
 			achievement.setAchievedAt(LocalDateTime.now());
 
-			// Guardar el plan de nutrición
+			// Guardar el logro
+			
 			achievementService.save(achievement);
 		}
+		redirectAttributes.addFlashAttribute("success", "Logro creado exitosamente.");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymInstructor/updateAchievement")
-	public String editAchievement(@ModelAttribute Achievement achievement, HttpServletRequest request) {
+	public String editAchievement(@ModelAttribute Achievement achievement, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Obtener el usuario autenticado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -454,6 +465,7 @@ public class InstructorController {
 		}
 
 		achievementService.update(achievement);
+		redirectAttributes.addFlashAttribute("success", "Logro actualizado exitosamente.");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
@@ -474,14 +486,15 @@ public class InstructorController {
 		achievementService.deleteAchievement(achievementService.getById(id));
 
 		// Redirigir con un mensaje de éxito
-		redirectAttributes.addFlashAttribute("successMessage", "Logro eliminado exitosamente.");
+		redirectAttributes.addFlashAttribute("success", "Logro eliminado exitosamente.");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymOwner/update/{id}")
-	public String updateInstructor(@PathVariable("id") int id, @ModelAttribute GymUserModel instructor) {
+	public String updateInstructor(@PathVariable("id") int id, @ModelAttribute GymUserModel instructor, RedirectAttributes redirectAttributes) {
 		instructorService.updateInstructor(instructor);
+		redirectAttributes.addFlashAttribute("success", "Instructor actualizado exitosamente.");
 		return "redirect:" + GESTIONINSTRUCTORES_VIEW;
 	}
 

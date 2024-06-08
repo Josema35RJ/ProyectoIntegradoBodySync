@@ -34,7 +34,7 @@
 					<li class="nav-item"><a class="nav-link active"
 						href="/auth/gymInstructor/GestionRutinas"><i
 							class="fas fa-calendar-alt"></i> Gestión de Rutinas</a></li>
-							<li class="nav-item"><a class="nav-link"
+						<li class="nav-item"><a class="nav-link"
 						href="/auth/gymInstructor/GestionAchievement"><i
 							class="fas fa-trophy"></i> Gestión de Logros</a></li>
 					<li class="nav-item"><a class="nav-link"
@@ -53,7 +53,9 @@
 			data-bs-toggle="modal" data-bs-target="#crearRutinaModal">
 			<i class="fas fa-plus-circle"></i> Agregar Nueva Rutina
 		</button>
-
+<div th:if="${success}" class="alert alert-success" role="alert">
+				<strong th:text="${success}"></strong>
+			</div>
 		<!-- Tarjetas de rutinas -->
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Iterar sobre las rutinas -->

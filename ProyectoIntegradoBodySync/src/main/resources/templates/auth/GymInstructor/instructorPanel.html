@@ -55,12 +55,8 @@
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Gestion de Clases Instructor</h1>
 		<div class="row g-4" id="classCards">
-			<button class="btn btn-success mb-3" data-bs-toggle="modal"
-				data-bs-target="#createNewClassModal">Añadir Nueva Clase</button>
-			<div th:if="${message}">
-				<div class="alert alert-success">
-					<p th:text="${message}"></p>
-				</div>
+			<div th:if="${success}" class="alert alert-success" role="alert">
+				<strong th:text="${success}"></strong>
 			</div>
 
 			<div class="container">
@@ -90,6 +86,9 @@
 									<li class="list-group-item"
 										th:text="'Fecha de inicio: ' + ${gymClass.startDate}">Fecha
 										de inicio</li>
+										<li class="list-group-item"
+										th:text="'Dias de la Semana: ' + ${gymClass.daysOfWeek}">Fecha
+										de inicio</li>
 									<!-- Nuevo campo para la fecha de inicio -->
 									<li class="list-group-item"
 										th:text="'Fecha de finalización: ' + ${gymClass.endDate}">Fecha
@@ -108,12 +107,6 @@
 											Miembros</button>
 									</form>
 								</th:block>
-								<button class="btn btn-warning mb-3 toggle-btn"
-									data-bs-toggle="modal" data-bs-target="#toggleClassModal"
-									th:attr="data-class-id=${gymClass.id}, data-class-active=${gymClass.active}">
-									<span th:if="${gymClass.active}">Desactivar</span> <span
-										th:if="${!gymClass.active}">Activar</span> Clase
-								</button>
 							</div>
 						</div>
 					</div>
@@ -296,30 +289,6 @@
 								cambios</button>
 						</div>
 					</form>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="modal fade" id="toggleClassModal" tabindex="-1"
-			aria-labelledby="toggleClassModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="toggleClassModalLabel">Confirmar
-							Acción</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<p id="toggleClassMessage">¿Estás seguro de que quieres
-							activar/desactivar esta clase?</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Cancelar</button>
-						<a id="confirmToggleLink" class="btn btn-primary">Confirmar</a>
-					</div>
 				</div>
 			</div>
 		</div>

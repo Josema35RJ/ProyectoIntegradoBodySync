@@ -15,14 +15,14 @@ public interface GymUserRepository extends JpaRepository<GymUser, Integer> {
 	
     List<GymUser> findByDeletedAndRole(boolean x,String role);
 	GymUser findByUsername(String email);
-	List<GymUser> findByEnrolledClasses_Id(int classId);
 	
-
 	 List<GymUser> findByRole( String role);
 
 	Integer countByAttendanceDaysContains(Date day);
 
 	Integer countByEnabledAndRole(boolean b, String role);
+
+	GymUser[] findByDeletedAndRoleAndEnrolledClasses_Id(boolean b, String string, int classId);
 
 
 }

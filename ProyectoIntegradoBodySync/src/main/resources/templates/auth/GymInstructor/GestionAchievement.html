@@ -53,7 +53,9 @@
 			data-bs-toggle="modal" data-bs-target="#crearLogroModal">
 			<i class="fas fa-plus-circle"></i> Agregar Nuevo Logro
 		</button>
-
+<div th:if="${success}" class="alert alert-success" role="alert">
+				<strong th:text="${success}"></strong>
+			</div>
 		<div class="row row-cols-1 row-cols-md-3 g-4">
 			<div class="col" th:each="logro : ${achievements}">
 				<div class="card h-100">

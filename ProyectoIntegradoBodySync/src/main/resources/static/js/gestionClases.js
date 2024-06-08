@@ -212,57 +212,59 @@ $('#toggleClassModal').on('show.bs.modal', function(event) {
 	}
 });
 $('#editExistingClassModal').on('show.bs.modal', function(event) {
-	var button = $(event.relatedTarget); // Botón que activó el modal
-	var classId = button.data('class-id'); // Extrae el ID de la clase
-	var className = button.data('class-name'); // Extrae la información de los atributos data-*
-	var classDescription = button.data('class-description');
-	var classInstructorId = button.data('class-instructor'); // Extrae el ID del instructor
-	var classTime = button.data('class-time');
-	var classCapacity = button.data('class-capacity');
-	var classStartDate = button.data('class-start-date');
-	var classEndDate = button.data('class-end-date');
-	var classDuration = button.data('class-duration'); // Extrae la duración de la clase
+    var button = $(event.relatedTarget); // Botón que activó el modal
+    var classId = button.data('class-id'); // Extrae el ID de la clase
+    var className = button.data('class-name'); // Extrae la información de los atributos data-*
+    var classDescription = button.data('class-description');
+    var classInstructorId = button.data('class-instructor'); // Extrae el ID del instructor
+    var classTime = button.data('class-time');
+    var classCapacity = button.data('class-capacity');
+    var classStartDate = button.data('class-start-date');
+    var classEndDate = button.data('class-end-date');
+    var classDuration = button.data('class-duration'); // Extrae la duración de la clase
+    var classDaysOfWeek = button.data('class-days-of-week'); // Extrae los días de la semana
 
-	var modal = $(this);
-	modal.find('.modal-body #editClassName').val(className);
-	modal.find('.modal-body #editClassDescription').val(classDescription);
-	modal.find('.modal-body #editClassTime').val(classTime);
-	modal.find('.modal-body #editClassMaximumCapacity').val(classCapacity);
-	modal.find('.modal-body #editClassStartDate').val(classStartDate);
-	modal.find('.modal-body #editclassInstructorId').val(classInstructorId);
-	modal.find('.modal-body #editClassEndDate').val(classEndDate);
-	modal.find('.modal-body #editClassDuration').val(classDuration); // Establece la duración en el campo del formulario
+    var modal = $(this);
+    modal.find('.modal-body #editClassName').val(className);
+    modal.find('.modal-body #editClassDescription').val(classDescription);
+    modal.find('.modal-body #editClassTime').val(classTime);
+    modal.find('.modal-body #editClassMaximumCapacity').val(classCapacity);
+    modal.find('.modal-body #editClassStartDate').val(classStartDate);
+    modal.find('.modal-body #editClassEndDate').val(classEndDate);
+    modal.find('.modal-body #editClassDuration').val(classDuration); // Establece la duración en el campo del formulario
+    modal.find('.modal-body #editClassDaysOfWeek').val(classDaysOfWeek); // Establece los días de la semana
 
-	var select = modal.find('.modal-body #editClassInstructor');
+    var select = modal.find('.modal-body #editClassInstructor');
 
-	// Limpia el select
-	select.empty();
+    // Limpia el select
+    select.empty();
 
-	// Haz una solicitud AJAX para obtener los datos de los instructores
-	$.ajax({
-		url: '/auth/gymOwner/instructors',
-		method: 'GET',
-		dataType: 'json',
-		success: function(instructors) {
-			// Añade los instructores al select
-			instructors.forEach(function(instructor) {
-				var option = new Option(instructor.name, instructor.id);
-				if (instructor.id === classInstructorId) {
-					option.selected = true;
-				}
-				select.append(option);
-			});
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			console.log(textStatus, errorThrown);
-			if (jqXHR.responseText.startsWith('<')) {
-				console.error('La respuesta no es un JSON válido, parece ser HTML.');
-			}
-		}
-	});
+    // Haz una solicitud AJAX para obtener los datos de los instructores
+    $.ajax({
+        url: '/auth/gymOwner/instructors',
+        method: 'GET',
+        dataType: 'json',
+        success: function(instructors) {
+            // Añade los instructores al select
+            instructors.forEach(function(instructor) {
+                var option = new Option(instructor.name, instructor.id);
+                if (instructor.id === classInstructorId) {
+                    option.selected = true;
+                }
+                select.append(option);
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            if (jqXHR.responseText.startsWith('<')) {
+                console.error('La respuesta no es un JSON válido, parece ser HTML.');
+            }
+        }
+    });
 
-	modal.find('#editExistingClassForm').attr('action', '/auth/gymOwner/updateClass/' + classId);
+    modal.find('#editExistingClassForm').attr('action', '/auth/gymOwner/updateClass/' + classId);
 });
+
 document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.addEventListener('click', function(event) {
         event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace

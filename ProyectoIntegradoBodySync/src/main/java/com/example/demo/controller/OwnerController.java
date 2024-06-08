@@ -100,9 +100,9 @@ public class OwnerController {
 	
 
 	@PostMapping("/auth/gymOwner/updateClass/{id}")
-	public String editClass(@PathVariable int id, @ModelAttribute GymClass updatedClass, BindingResult result,
+	public String editClass(@PathVariable int id, @ModelAttribute GymClassModel updatedClass, BindingResult result,
 			RedirectAttributes redirectAttributes, HttpServletRequest request) {
- 
+             System.out.println(updatedClass);
 		GymClassModel existingClass = gymClassService.getClassById(id);
 		if (existingClass != null) {
 			existingClass.setName(updatedClass.getName());
