@@ -211,11 +211,8 @@ public class GymUserServiceImpl implements UserDetailsService, GymUserService {
 	}
 
 	public List<GymUserModel> ListGymUsersByClassId(int classId) {
-		List<GymUserModel> l = new ArrayList<>();
-            
+		List<GymUserModel> l = new ArrayList<>();        
 		for (GymUser g : gymUserRepository.findByClassIdAndDeletedFalse(classId)) {
-			  System.out.println("LISTAAAAAAAAAA");
-              System.out.println(l);
 			l.add(gymUserConverter.transform(g));
 		}
 

@@ -48,7 +48,7 @@
 			<tbody>
 				<tr th:each="achievement : ${achievements}">
 					<td th:text="${achievement.description}"></td>
-					<td th:text="${#dates.format(achievement.dateAchieved, 'dd/MM/yyyy')}"></td>
+					<td th:text="${achievement.achievedAt}"></td>
 				</tr>
 			</tbody>
 		</table>

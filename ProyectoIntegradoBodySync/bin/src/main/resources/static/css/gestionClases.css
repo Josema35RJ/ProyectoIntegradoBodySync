@@ -1,136 +1,162 @@
 body {
-	font-family: 'Open Sans', sans-serif;
-	background-color: #f4f4f4;
-	padding-top: 80px; /* Ajuste para la barra de navegación fija */
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f4f4f4;
+    padding-top: 80px; /* Ajuste para la barra de navegación fija */
 }
 
 .navbar {
-	background-color: #007bff; /* Azul principal */
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 1030;
+    background-color: #007bff; /* Azul principal */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
 }
 
 .navbar-brand, .nav-link {
-	color: #fff !important;
+    color: #fff !important;
 }
 
 .nav-link:hover {
-	background-color: #0056b3; /* Azul más oscuro para el hover */
-	border-radius: 5px;
+    background-color: #0056b3; /* Azul más oscuro para el hover */
+    border-radius: 5px;
 }
 
 .card-header {
-	background-color: #007bff; /* Azul para los encabezados de las tarjetas */
-	color: #fff;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+    background-color: #007bff; /* Azul para los encabezados de las tarjetas */
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .card-header .status {
-	padding: 0.25em 0.5em;
-	border-radius: 0.25em;
-	color: #fff;
-	font-weight: bold;
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+    color: #fff;
+    font-weight: bold;
 }
 
-.card-header .active {
-	background-color: #28a745; /* Verde para clases activas */
+.card-header .status.enCurso {
+    background-color: #28a745; /* Verde para clases activas */
 }
 
-.card-header .upcoming {
-	background-color: #ffc107; /* Amarillo para clases próximas */
+.card-header .status.proxima {
+    background-color: #ffc107; /* Amarillo para clases próximas */
 }
 
-.card-header .finished {
-	background-color: #dc3545; /* Rojo para clases finalizadas */
+.card-header .status.finalizada {
+    background-color: #dc3545; /* Rojo para clases finalizadas */
 }
 
 .container {
-	margin-top: 80px;
-	background-color: #fff;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    margin-top: 80px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
 }
 
 .class-card {
-	transition: transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .class-card:hover {
-	transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 .active-class {
-	border-left: 5px solid #28a745; /* Indicador para clases activas */
+    border-left: 5px solid #28a745; /* Indicador para clases activas */
 }
 
 .upcoming-class {
-	border-left: 5px solid #ffc107; /* Indicador para clases próximas */
+    border-left: 5px solid #ffc107; /* Indicador para clases próximas */
 }
 
 .finished-class {
-	border-left: 5px solid #dc3545; /* Indicador para clases finalizadas */
+    border-left: 5px solid #dc3545; /* Indicador para clases finalizadas */
 }
 
 .charts-container {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 20px;
-	justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
 .chart {
-	flex: 1;
-	min-width: 300px; /* Ajusta este valor según tus necesidades */
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	border-radius: 8px;
-	overflow: hidden;
-	transition: transform 0.3s ease;
+    flex: 1;
+    min-width: 300px; /* Ajusta este valor según tus necesidades */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
 }
 
 .chart h2 {
-	text-align: center;
-	padding: 15px;
-	background-color: #f8f9fa;
-	margin: 0;
+    text-align: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    margin: 0;
 }
 
 .chart canvas {
-	display: block; /* Elimina el espacio extra debajo del canvas */
+    display: block; /* Elimina el espacio extra debajo del canvas */
 }
 
 .chart:hover {
-	transform: translateY(-5px);
+    transform: translateY(-5px);
 }
 
 /* Estilos adicionales para mejorar la apariencia de las tarjetas */
 .card-body {
-	position: relative;
-	padding: 1rem;
+    position: relative;
+    padding: 1rem;
 }
 
 .card-body::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 5px;
-	bottom: 0;
-	transition: background-color 0.3s ease;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    bottom: 0;
+    transition: background-color 0.3s ease;
 }
 
 .card-body.active::before {
-	background-color: #28a745; /* Verde para clases activas */
+    background-color: #28a745; /* Verde para clases activas */
 }
 
 .card-body.upcoming::before {
-	background-color: #ffc107; /* Amarillo para clases próximas */
+    background-color: #ffc107; /* Amarillo para clases próximas */
 }
 
 .card-body.finished::before {
-	background-color: #dc3545; /* Rojo para clases finalizadas */
+    background-color: #dc3545; /* Rojo para clases finalizadas */
 }
+.star-rating {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.star-rating .fa-star {
+    color: #e3e6f0;
+    font-size: 1.2rem;
+}
+
+.star-rating .fa-star.filled {
+    color: #ffc107;
+}
+
+/* Adjustments for Modal */
+.modal-dialog {
+    max-width: 500px; /* Adjust the maximum width as needed */
+}
+
+/* Adjustments for Button */
+.btn {
+    /* Add your desired button styles here */
+    padding: 10px 20px; /* Adjust padding for button */
+    font-size: 16px; /* Adjust font size for button */
+}
+

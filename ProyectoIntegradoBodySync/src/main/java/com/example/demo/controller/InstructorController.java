@@ -149,7 +149,12 @@ public class InstructorController {
 	    }
 
 	    List<LocalDateTime> createdDates = members.stream().map(GymUserModel::getCreatedDate).collect(Collectors.toList());
-
+	    
+	    // Agregar la lista de rutinas al modelo
+	    model.addAttribute("routines", routineService.ListRoutine());
+	    model.addAttribute("exercises", exerciseService.ListExercise());
+	    model.addAttribute("planNutrition", nutritionPlanService.ListAllNutritionPlan());
+	    model.addAttribute("achievements", achievementService.ListAchievement());
 	    // Añade los miembros activos e inactivos, las edades, los IMCs y los días desde la creación al modelo
 	    model.addAttribute("activeMembers", activeMembers);
 	    model.addAttribute("inactiveMembers", inactiveMembers);

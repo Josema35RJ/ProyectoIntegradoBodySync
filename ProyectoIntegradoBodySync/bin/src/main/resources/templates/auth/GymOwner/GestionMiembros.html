@@ -41,6 +41,8 @@
 					<li class="nav-item"><a class="nav-link"
 						href="/auth/gymOwner/ConfiguracionGym"><i class="fas fa-cogs"></i>
 							Configuración del Gimnasio</a></li>
+					<li class="nav-item"><a class="nav-link" href="/auth/logout"><i
+							class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
 				</ul>
 			</div>
 		</div>
@@ -48,6 +50,7 @@
 
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Gestion de Miembros</h1>
+
 		<div class="row g-4" id="memberCards">
 			<!-- Filtros -->
 			<div class="container my-4">
@@ -82,7 +85,7 @@
 					<!-- Pestaña de miembros activos -->
 					<div class="tab-pane fade show active" id="active" role="tabpanel"
 						aria-labelledby="active-tab">
-						<div class="member-container">
+						<div class="member-container row row-cols-1 row-cols-md-3 g-4">
 							<!-- Bucle para miembros activos -->
 							<div th:each="miembro : ${activeMembers}" class="col-md-4 mb-4">
 								<div class="card member-card shadow-sm">
@@ -122,16 +125,14 @@
 										<hr>
 										<div class="btn-group" role="group"
 											aria-label="Acciones del Miembro">
-											<a th:href="@{/gymUser/viewProfile/{id}(id=${miembro.id})}"
-												class="btn btn-primary btn-sm">Ver Perfil</a>
 											<form
-												th:action="@{/gymUser/activateDeactivate/{id}(id=${miembro.id})}"
+												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
 												method="post">
-												<button type="submit" class="btn btn-warning btn-sm">Desactivar</button>
+												<button type="submit" class="btn btn-success btn-sm">Desactivar</button>
 											</form>
 
 											<a
-												th:href="@{/gymUser/viewAchievements/{id}(id=${miembro.id})}"
+												th:href="@{/auth/gymOwner/viewAchievements/{id}(id=${miembro.id})}"
 												class="btn btn-success btn-sm">Ver Logros</a>
 										</div>
 										<div th:if="${miembro.paymentStatus == false}"
@@ -144,7 +145,8 @@
 											<strong>¡Atención!</strong> Este miembro tiene un alto riesgo
 											de abandono.
 										</div>
-										<div th:if="${miembro.createdDate}"
+										<div
+											th:if="${miembro.createdDate != null and miembro.createdDate == fechaActual}"
 											class="alert alert-info mt-3" role="alert">
 											<strong>¡Bienvenido!</strong> Nuevo miembro del gimnasio.
 										</div>
@@ -156,7 +158,7 @@
 					<!-- Pestaña de miembros inactivos -->
 					<div class="tab-pane fade" id="inactive" role="tabpanel"
 						aria-labelledby="inactive-tab">
-						<div class="member-container">
+						<div class="member-container row row-cols-1 row-cols-md-3 g-4">
 							<!-- Bucle para miembros inactivos -->
 							<div th:each="miembro : ${inactiveMembers}" class="col-md-4 mb-4">
 								<div class="card member-card shadow-sm bg-light">
@@ -196,10 +198,8 @@
 										<hr>
 										<div class="btn-group" role="group"
 											aria-label="Acciones del Miembro">
-											<a th:href="@{/gymUser/viewProfile/{id}(id=${miembro.id})}"
-												class="btn btn-primary btn-sm">Ver Perfil</a>
 											<form
-												th:action="@{/gymUser/activateDeactivate/{id}(id=${miembro.id})}"
+												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
 												method="post">
 												<button type="submit" class="btn btn-success btn-sm">Activar</button>
 											</form>
@@ -255,10 +255,5 @@
 		<!-- Scripts para Chart.js -->
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script src="/js/gestionMiembros.js"></script>
-
-		<!-- Bootstrap and interactive functionality scripts -->
-		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
