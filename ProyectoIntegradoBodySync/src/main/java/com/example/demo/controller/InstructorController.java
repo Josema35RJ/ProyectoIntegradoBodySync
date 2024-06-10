@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +48,7 @@ import com.example.demo.service.impl.ChurnPredictionServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import smile.data.DataFrame;
 
 @Controller
 public class InstructorController {
@@ -126,36 +128,40 @@ public class InstructorController {
 
 	@PostMapping("/auth/gymInstructor/GestionMiembros")
 	public String GestionMiembros(@RequestParam("classId") int classId, HttpSession session, Model model) {
-	    // Guardar el ID de la clase en la sesión
-	    session.setAttribute("classId", classId);
+	    List<GymUserModel> members = gymUserService.ListGymUsersByClassId(classId);
 
-	    // Obtener la clase según el ID
-	    GymClassModel gymClass = gymClassService.getClassById(classId);
-       
-	    // Obtener todos los miembros del gimnasio
-	    List<GymUserModel> members = gymUserService.ListAllGymUsers();
+	    // Filtra los miembros activos e inactivos
+	    List<GymUserModel> activeMembers = members.stream()
+	            .filter(gymUser -> gymUser.isEnabled() && !gymUser.isDeleted()).collect(Collectors.toList());
+	    List<GymUserModel> inactiveMembers = members.stream()
+	            .filter(gymUser -> !gymUser.isEnabled() && !gymUser.isDeleted()).collect(Collectors.toList());
 
-	    // Filtrar los miembros que están inscritos en la clase específica y dividirlos en activos e inactivos
-	    Map<Boolean, List<GymUserModel>> membersByActivity = members.stream()
-	            .filter(gymUser -> gymUser.getEnrolledClasses().contains(gymClass))
-	            .collect(Collectors.partitioningBy(gymUser -> gymUser.isEnabled() && !gymUser.isDeleted()));
-
-	    List<GymUserModel> activeMembersInClass = membersByActivity.getOrDefault(true, Collections.emptyList());
-	    List<GymUserModel> inactiveMembersInClass = membersByActivity.getOrDefault(false, Collections.emptyList());
-
-	    // Calcular la edad y el IMC para cada miembro inscrito en la clase
-	    List<Integer> ages = activeMembersInClass.stream()
-	            .map(GymUserModel::getBirthDate)
-	            .map(gymUserService::calculateAge)
+	    // Calcula la edad y el IMC para cada miembro
+	    List<Integer> ages = members.stream().map(GymUserModel::getBirthDate).map(gymUserService::calculateAge)
 	            .collect(Collectors.toList());
+	    List<Float> bmis = members.stream().map(gymUserService::calculateBMI).collect(Collectors.toList());
 
-	    // Añadir los miembros activos e inactivos, las edades y los IMCs al modelo
-	    model.addAttribute("activeMembers", activeMembersInClass);
-	    model.addAttribute("inactiveMembers", inactiveMembersInClass);
+	    // Predice el riesgo de abandono para cada miembro
+	    for (GymUserModel gymUser : members) {
+	        DataFrame data = gymUserToDataFrameConverter.convert(Collections.singletonList(gymUser));
+	        boolean churnRisk = churnPredictionService.predict(data);
+	        gymUser.setChurn(churnRisk);
+	    }
+
+	    List<LocalDateTime> createdDates = members.stream().map(GymUserModel::getCreatedDate).collect(Collectors.toList());
+
+	    // Añade los miembros activos e inactivos, las edades, los IMCs y los días desde la creación al modelo
+	    model.addAttribute("activeMembers", activeMembers);
+	    model.addAttribute("inactiveMembers", inactiveMembers);
 	    model.addAttribute("ages", ages);
+	    model.addAttribute("bmis", bmis);
+	    model.addAttribute("daysSinceCreation", createdDates);
+	    LocalDate fechaActual = LocalDate.now();
+	    model.addAttribute("fechaActual", fechaActual);
 
 	    return GESTIONMIEMBROS_VIEW;
 	}
+
 
 	@GetMapping("/auth/gymInstructor/GestionEjercicios")
 	public String GestionEjercicios(HttpSession session, Model model) {

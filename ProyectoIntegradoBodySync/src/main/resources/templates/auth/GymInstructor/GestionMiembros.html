@@ -40,7 +40,7 @@
 	<div class="container mt-4">
 		<h1 class="text-center mb-4">Gestion de Miembros Instructor</h1>
 		<div class="row g-4" id="memberCards">
-		<div th:if="${success}" class="alert alert-success" role="alert">
+			<div th:if="${success}" class="alert alert-success" role="alert">
 				<strong th:text="${success}"></strong>
 			</div>
 			<!-- Filtros -->
@@ -76,7 +76,7 @@
 					<!-- Pestaña de miembros activos -->
 					<div class="tab-pane fade show active" id="active" role="tabpanel"
 						aria-labelledby="active-tab">
-						<div class="member-container">
+						<div class="member-container row row-cols-1 row-cols-md-3 g-4">
 							<!-- Bucle para miembros activos -->
 							<div th:each="miembro : ${activeMembers}" class="col-md-4 mb-4">
 								<div class="card member-card shadow-sm">
