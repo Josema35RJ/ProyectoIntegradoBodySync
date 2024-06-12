@@ -142,3 +142,45 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+// Script para llenar el modal de edición con los datos del instructor seleccionado
+			function fillEditInstructorModal(button) {
+				const instructorData = $(button).data();
+				$('#editInstructorId').val(instructorData.id);
+				$('#editFirstName').val(instructorData.firstname);
+				$('#editLastName').val(instructorData.lastname);
+				$('#editDni').val(instructorData.dni);
+				$('#editUsername').val(instructorData.username);
+				$('#editBiography').val(instructorData.biography);
+				$('#editCity').val(instructorData.city);
+				$('#editProvince').val(instructorData.province);
+				$('#editPostalCode').val(instructorData.postalcode);
+				$('#editRole').val(instructorData.role);
+				$('#editPassword').val(instructorData.password);
+			}
+
+			// Script para el gráfico de estado de los instructores
+			const ctx = document.getElementById('instructorStatusChart')
+					.getContext('2d');
+			const instructorStatusChart = new Chart(ctx, {
+				type : 'pie',
+				data : {
+					labels : [ 'Activos', 'Inactivos' ],
+					datasets : [ {
+						label : 'Estado de Instructores',
+						data : [ 10, 5 ], // Reemplaza con los datos reales
+						backgroundColor : [ '#28a745', '#dc3545' ],
+					} ]
+				},
+				options : {
+					responsive : true,
+					plugins : {
+						legend : {
+							position : 'top',
+						},
+						title : {
+							display : true,
+							text : 'Estado de los Instructores'
+						}
+					}
+				}
+			});

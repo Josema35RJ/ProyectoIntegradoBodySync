@@ -98,29 +98,41 @@ public class OwnerController {
 		return "redirect:" + referer;
 	}
 	
+	@PostMapping("/auth/gymOwner/updateClass")
+	public String editClass(@ModelAttribute GymClassModel updatedClass, BindingResult result,
+	        RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	    System.out.println(updatedClass);
 
-	@PostMapping("/auth/gymOwner/updateClass/{id}")
-	public String editClass(@PathVariable int id, @ModelAttribute GymClassModel updatedClass, BindingResult result,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
-             System.out.println(updatedClass);
-		GymClassModel existingClass = gymClassService.getClassById(id);
-		if (existingClass != null) {
-			existingClass.setName(updatedClass.getName());
-			existingClass.setDescription(updatedClass.getDescription());
-			existingClass.setStartDate(updatedClass.getStartDate());
-			existingClass.setEndDate(updatedClass.getEndDate());
-			existingClass.setDaysOfWeek(updatedClass.getDaysOfWeek());
-			existingClass.setTime(updatedClass.getTime());
-			existingClass.setDuration(updatedClass.getDuration());
-			existingClass.setMaximumCapacity(updatedClass.getMaximumCapacity());
-			existingClass.setInstructor(existingClass.getInstructor());
+	    GymClassModel existingClass = gymClassService.getClassById(updatedClass.getId());
+	    if (existingClass != null) {
+	        existingClass.setName(updatedClass.getName());
+	        existingClass.setDescription(updatedClass.getDescription());
+	        existingClass.setStartDate(updatedClass.getStartDate());
+	        existingClass.setEndDate(updatedClass.getEndDate());
+	        existingClass.setDaysOfWeek(updatedClass.getDaysOfWeek());
+	        existingClass.setTime(updatedClass.getTime());
+	        existingClass.setDuration(updatedClass.getDuration());
+	        existingClass.setMaximumCapacity(updatedClass.getMaximumCapacity());
 
-			gymClassService.updateClass(existingClass);
-			gymUserService.getGymUserById(existingClass.getInstructor().getId()).getEnrolledClasses().add(existingClass);
-			redirectAttributes.addFlashAttribute("success", "Clase actualizada con éxito");
-		}
-		String referer = request.getHeader("Referer");	
-		return "redirect:" + referer;
+	        // Actualizar el instructor si ha cambiado
+	        if (!existingClass.getInstructor().getId().equals(updatedClass.getInstructor().getId())) {
+	            // Remover la clase de las clases inscritas del instructor anterior
+	            gymUserService.getGymUserById(existingClass.getInstructor().getId()).getEnrolledClasses().remove(existingClass);
+	            
+	            // Actualizar al nuevo instructor
+	            existingClass.setInstructor(updatedClass.getInstructor());
+
+	            // Agregar la clase a las clases inscritas del nuevo instructor
+	            gymUserService.getGymUserById(updatedClass.getInstructor().getId()).getEnrolledClasses().add(existingClass);
+	        }
+
+	        gymClassService.updateClass(existingClass);
+
+	        redirectAttributes.addFlashAttribute("success", "Clase actualizada con éxito");
+	    }
+
+	    String referer = request.getHeader("Referer");
+	    return "redirect:" + referer;
 	}
 	
 	@PostMapping("/auth/gymUser/activateDesactivate/{id}")

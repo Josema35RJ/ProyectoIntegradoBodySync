@@ -271,14 +271,15 @@
 							<!-- Días de la semana -->
 							<div class="mb-3">
 								<label for="editClassDaysOfWeek" class="form-label">Días
-									de la semana (No seleccione ningun, para mantener mismos)</label> <select multiple class="form-control"
-									id="editClassDaysOfWeek" name="daysOfWeek">
-									<option value="0" >Domingo</option>
-									<option value="1" >Lunes</option>
-									<option value="2" >Martes</option>
-									<option value="3" >Miércoles</option>
-									<option value="4" >Jueves</option>
-									<option value="5" >Viernes</option>
+									de la semana (No selecciones ninguno, para mantener los mismos)</label>
+								<select multiple class="form-control" id="editClassDaysOfWeek"
+									name="daysOfWeek">
+									<option value="0">Domingo</option>
+									<option value="1">Lunes</option>
+									<option value="2">Martes</option>
+									<option value="3">Miércoles</option>
+									<option value="4">Jueves</option>
+									<option value="5">Viernes</option>
 									<option value="6">Sábado</option>
 								</select>
 							</div>
@@ -303,13 +304,11 @@
 							<!-- Selector de instructores -->
 							<div class="mb-3">
 								<label for="editClassInstructor" class="form-label">Instructor</label>
-								<select class="form-control" id="newClassInstructor"
-									name="instructorId" required>
-									<option value="0">Sin Cambiar Instructor</option>
+								<select class="form-control" id="editclassInstructorId"
+									name="instructor.id" required>
 									<option th:each="instructor : ${instructors}"
 										th:value="${instructor.id}"
 										th:text="${instructor.firstName} + ' ' + ${instructor.lastName}"></option>
-								
 								</select>
 							</div>
 							<button type="submit" class="btn btn-primary">Guardar
