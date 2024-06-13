@@ -182,3 +182,13 @@ body {
 .card.member-card.vip {
     border-color: #28a745; /* Verde para suscripción VIP */
 }
+.pagination {
+    margin-top: 20px;
+}
+.pagination .page-item .page-link {
+    color: #007bff;
+}
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}

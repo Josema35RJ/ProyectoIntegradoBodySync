@@ -23,7 +23,8 @@ public class GymClassServiceImpl implements GymClassService {
 	@Autowired
 	@Qualifier("gymClassRepository")
 	private GymClassRepository gymClassRepository;
-
+	
+	
 	@Autowired
 	@Qualifier("instructorRepository")
 	private InstructorRepository instructorRepository;
@@ -52,19 +53,18 @@ public class GymClassServiceImpl implements GymClassService {
 	}
 
 	public void updateClass(GymClassModel gymClass) {
-		// Obtén la clase existente de la base de datos
-		GymClass existingClass = gymClassRepository.findById(gymClass.getId())
-				.orElseThrow(() -> new IllegalArgumentException("Clase no encontrada con ID: " + gymClass.getId()));
-
 		// Actualiza la clase existente con los nuevos valores
+		GymClassModel existingClass = gymClassConverter.transform(gymClassRepository.findById(gymClass.getId()).get());
 		existingClass.setName(gymClass.getName());
 		existingClass.setDescription(gymClass.getDescription());
 		existingClass.setInstructor(gymClass.getInstructor());
 		existingClass.setTime(gymClass.getTime());
 		existingClass.setMaximumCapacity(gymClass.getMaximumCapacity());
+		if(!gymClass.getDaysOfWeek().isEmpty())
+		existingClass.setDaysOfWeek(gymClass.getDaysOfWeek());
 
 		// Guarda la clase actualizada en la base de datos
-		gymClassRepository.save(existingClass);
+		gymClassRepository.save(gymClassConverter.transform(gymClass));
 	}
 
 	public void assignInstructor(int classId, int instructorId) {

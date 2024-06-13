@@ -72,158 +72,161 @@
 
 
 			<!-- Tab System for Active and Inactive Members -->
-			<div class="container">
-				<ul class="nav nav-tabs">
-					<li class="nav-item"><a class="nav-link active"
-						data-bs-toggle="tab" href="#active">Activos</a></li>
-					<li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-						href="#inactive">Inactivos</a></li>
-				</ul>
+			<div class="container mt-4">
+				<div class="row g-4" id="memberCards">
+					<ul class="nav nav-tabs">
+						<li class="nav-item"><a class="nav-link active"
+							data-bs-toggle="tab" href="#active">Activos</a></li>
+						<li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
+							href="#inactive">Inactivos</a></li>
+					</ul>
 
-				<div class="tab-content mt-4">
-					<!-- Active Members Tab -->
-					<!-- Pestaña de miembros activos -->
-					<div class="tab-pane fade show active" id="active" role="tabpanel"
-						aria-labelledby="active-tab">
-						<div class="member-container row row-cols-1 row-cols-md-3 g-4">
-							<!-- Bucle para miembros activos -->
-							<div th:each="miembro : ${activeMembers}" class="col-md-4 mb-4">
-								<div class="card member-card shadow-sm">
-									<div class="card-body">
-										<h5 class="card-title"
-											th:text="${miembro.firstName} + ' ' + ${miembro.lastName}">Nombre
-											del Miembro</h5>
-										<p class="card-text">
-											<strong>DNI:</strong> <span th:text="${miembro.dni}">12345678Z</span><br>
-											<strong>Email:</strong> <span th:text="${miembro.username}">email@example.com</span><br>
-											<strong>Provincia:</strong> <span
-												th:text="${miembro.province}">Provincia</span><br> <strong>Ciudad:</strong>
-											<span th:text="${miembro.city}">Ciudad</span><br> <strong>Fecha
-												de Nacimiento:</strong> <span
-												th:text="${#dates.format(miembro.birthDate, 'dd/MM/yyyy')}">01/01/1990</span><br>
-											<strong>Peso:</strong> <span th:text="${miembro.weight}">70</span>
-											kg<br> <strong>Altura:</strong> <span
-												th:text="${miembro.height}">1.75</span> cm<br> <strong>Nivel
-												de Actividad:</strong> <span th:text="${miembro.activityLevel}">Alto</span><br>
-											<strong>Objetivo de Fitness:</strong> <span
-												th:text="${miembro.goal}">Pérdida de peso</span><br> <strong>Clases
-												Inscritas:</strong>
-										<ul>
-											<li th:each="clase : ${miembro.enrolledClasses}"
-												th:text="${clase.name}">Nombre de la Clase</li>
-										</ul>
-										</p>
-										<div class="injuries-container">
-											<h6>Lesiones</h6>
-											<div class="body-silhouette">
-												<div th:each="lesion : ${miembro.injuriesList}"
-													class="injury-spot"
-													th:classappend="${'severity-' + lesion.severity}"
-													th:data-name="${lesion.injuryName}"></div>
+					<div class="tab-content mt-4">
+						<!-- Active Members Tab -->
+						<!-- Pestaña de miembros activos -->
+						<div class="tab-pane fade show active" id="active" role="tabpanel"
+							aria-labelledby="active-tab">
+							<div class="member-container row row-cols-1 row-cols-md-3 g-4">
+								<!-- Bucle para miembros activos -->
+								<div th:each="miembro : ${activeMembers}" class="col-md-4 mb-4">
+									<div class="card member-card shadow-sm">
+										<div class="card-body">
+											<h5 class="card-title"
+												th:text="${miembro.firstName} + ' ' + ${miembro.lastName}">Nombre
+												del Miembro</h5>
+											<p class="card-text">
+												<strong>DNI:</strong> <span th:text="${miembro.dni}">12345678Z</span><br>
+												<strong>Email:</strong> <span th:text="${miembro.username}">email@example.com</span><br>
+												<strong>Provincia:</strong> <span
+													th:text="${miembro.province}">Provincia</span><br> <strong>Ciudad:</strong>
+												<span th:text="${miembro.city}">Ciudad</span><br> <strong>Fecha
+													de Nacimiento:</strong> <span
+													th:text="${#dates.format(miembro.birthDate, 'dd/MM/yyyy')}">01/01/1990</span><br>
+												<strong>Peso:</strong> <span th:text="${miembro.weight}">70</span>
+												kg<br> <strong>Altura:</strong> <span
+													th:text="${miembro.height}">1.75</span> cm<br> <strong>Nivel
+													de Actividad:</strong> <span th:text="${miembro.activityLevel}">Alto</span><br>
+												<strong>Objetivo de Fitness:</strong> <span
+													th:text="${miembro.goal}">Pérdida de peso</span><br> <strong>Clases
+													Inscritas:</strong>
+											<ul>
+												<li th:each="clase : ${miembro.enrolledClasses}"
+													th:text="${clase.name}">Nombre de la Clase</li>
+											</ul>
+											</p>
+											<div class="injuries-container">
+												<h6>Lesiones</h6>
+												<div class="body-silhouette">
+													<div th:each="lesion : ${miembro.injuriesList}"
+														class="injury-spot"
+														th:classappend="${'severity-' + lesion.severity}"
+														th:data-name="${lesion.injuryName}"></div>
+												</div>
 											</div>
-										</div>
-										<hr>
-										<div class="btn-group" role="group"
-											aria-label="Acciones del Miembro">
-											<form
-												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
-												method="post">
-												<button type="submit" class="btn btn-success btn-sm">Desactivar</button>
-											</form>
+											<hr>
+											<div class="btn-group" role="group"
+												aria-label="Acciones del Miembro">
+												<form
+													th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
+													method="post">
+													<button type="submit" class="btn btn-success btn-sm">Desactivar</button>
+												</form>
 
-											<a
-												th:href="@{/auth/gymOwner/viewAchievements/{id}(id=${miembro.id})}"
-												class="btn btn-success btn-sm">Ver Logros</a>
-										</div>
-										<div th:if="${miembro.paymentStatus == false}"
-											class="alert alert-danger mt-3" role="alert">
-											<strong>¡Atención!</strong> Este miembro no ha realizado el
-											pago.
-										</div>
-										<div th:if="${miembro.churn == true}"
-											class="alert alert-warning mt-3" role="alert">
-											<strong>¡Atención!</strong> Este miembro tiene un alto riesgo
-											de abandono.
-										</div>
-										<div
-											th:if="${miembro.createdDate != null and miembro.createdDate == fechaActual}"
-											class="alert alert-info mt-3" role="alert">
-											<strong>¡Bienvenido!</strong> Nuevo miembro del gimnasio.
+												<a
+													th:href="@{/auth/gymOwner/viewAchievements/{id}(id=${miembro.id})}"
+													class="btn btn-success btn-sm">Ver Logros</a>
+											</div>
+											<div th:if="${miembro.paymentStatus == false}"
+												class="alert alert-danger mt-3" role="alert">
+												<strong>¡Atención!</strong> Este miembro no ha realizado el
+												pago.
+											</div>
+											<div th:if="${miembro.churn == true}"
+												class="alert alert-warning mt-3" role="alert">
+												<strong>¡Atención!</strong> Este miembro tiene un alto
+												riesgo de abandono.
+											</div>
+											<div
+												th:if="${miembro.createdDate != null and miembro.createdDate == fechaActual}"
+												class="alert alert-info mt-3" role="alert">
+												<strong>¡Bienvenido!</strong> Nuevo miembro del gimnasio.
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<!-- Pestaña de miembros inactivos -->
-					<div class="tab-pane fade" id="inactive" role="tabpanel"
-						aria-labelledby="inactive-tab">
-						<div class="member-container row row-cols-1 row-cols-md-3 g-4">
-							<!-- Bucle para miembros inactivos -->
-							<div th:each="miembro : ${inactiveMembers}" class="col-md-4 mb-4">
-								<div class="card member-card shadow-sm bg-light">
-									<div class="card-body">
-										<h5 class="card-title"
-											th:text="${miembro.firstName} + ' ' + ${miembro.lastName}">Nombre
-											del Miembro</h5>
-										<p class="card-text">
-											<strong>DNI:</strong> <span th:text="${miembro.dni}">12345678Z</span><br>
-											<strong>Email:</strong> <span th:text="${miembro.username}">email@example.com</span><br>
-											<strong>Provincia:</strong> <span
-												th:text="${miembro.province}">Provincia</span><br> <strong>Ciudad:</strong>
-											<span th:text="${miembro.city}">Ciudad</span><br> <strong>Fecha
-												de Nacimiento:</strong> <span
-												th:text="${#dates.format(miembro.birthDate, 'dd/MM/yyyy')}">01/01/1990</span><br>
-											<strong>Peso:</strong> <span th:text="${miembro.weight}">70</span>
-											kg<br> <strong>Altura:</strong> <span
-												th:text="${miembro.height}">1.75</span> cm<br> <strong>Nivel
-												de Actividad:</strong> <span th:text="${miembro.activityLevel}">Alto</span><br>
-											<strong>Objetivo de Fitness:</strong> <span
-												th:text="${miembro.goal}">Pérdida de peso</span><br> <strong>Clases
-												Inscritas:</strong>
-										<ul>
-											<li th:each="clase : ${miembro.enrolledClasses}"
-												th:text="${clase.name}">Nombre de la Clase</li>
-										</ul>
-										</p>
-										<div class="injuries-container">
-											<h6>Lesiones</h6>
-											<div class="body-silhouette">
-												<div th:each="lesion : ${miembro.injuriesList}"
-													class="injury-spot"
-													th:classappend="${'severity-' + lesion.severity}"
-													th:data-name="${lesion.injuryName}"></div>
+						<!-- Pestaña de miembros inactivos -->
+						<div class="tab-pane fade" id="inactive" role="tabpanel"
+							aria-labelledby="inactive-tab">
+							<div class="member-container row row-cols-1 row-cols-md-3 g-4">
+								<!-- Bucle para miembros inactivos -->
+								<div th:each="miembro : ${inactiveMembers}"
+									class="col-md-4 mb-4">
+									<div class="card member-card shadow-sm bg-light">
+										<div class="card-body">
+											<h5 class="card-title"
+												th:text="${miembro.firstName} + ' ' + ${miembro.lastName}">Nombre
+												del Miembro</h5>
+											<p class="card-text">
+												<strong>DNI:</strong> <span th:text="${miembro.dni}">12345678Z</span><br>
+												<strong>Email:</strong> <span th:text="${miembro.username}">email@example.com</span><br>
+												<strong>Provincia:</strong> <span
+													th:text="${miembro.province}">Provincia</span><br> <strong>Ciudad:</strong>
+												<span th:text="${miembro.city}">Ciudad</span><br> <strong>Fecha
+													de Nacimiento:</strong> <span
+													th:text="${#dates.format(miembro.birthDate, 'dd/MM/yyyy')}">01/01/1990</span><br>
+												<strong>Peso:</strong> <span th:text="${miembro.weight}">70</span>
+												kg<br> <strong>Altura:</strong> <span
+													th:text="${miembro.height}">1.75</span> cm<br> <strong>Nivel
+													de Actividad:</strong> <span th:text="${miembro.activityLevel}">Alto</span><br>
+												<strong>Objetivo de Fitness:</strong> <span
+													th:text="${miembro.goal}">Pérdida de peso</span><br> <strong>Clases
+													Inscritas:</strong>
+											<ul>
+												<li th:each="clase : ${miembro.enrolledClasses}"
+													th:text="${clase.name}">Nombre de la Clase</li>
+											</ul>
+											</p>
+											<div class="injuries-container">
+												<h6>Lesiones</h6>
+												<div class="body-silhouette">
+													<div th:each="lesion : ${miembro.injuriesList}"
+														class="injury-spot"
+														th:classappend="${'severity-' + lesion.severity}"
+														th:data-name="${lesion.injuryName}"></div>
+												</div>
 											</div>
-										</div>
-										<hr>
-										<div class="btn-group" role="group"
-											aria-label="Acciones del Miembro">
-											<form
-												th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
-												method="post">
-												<button type="submit" class="btn btn-success btn-sm">Activar</button>
-											</form>
-											<form th:action="@{/gymUser/delete/{id}(id=${miembro.id})}"
-												method="post">
-												<button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-											</form>
-											<a
-												th:href="@{/gymUser/viewAchievements/{id}(id=${miembro.id})}"
-												class="btn btn-success btn-sm">Ver Logros</a>
-										</div>
-										<div th:if="${miembro.paymentStatus == false}"
-											class="alert alert-danger mt-3" role="alert">
-											<strong>¡Atención!</strong> Este miembro no ha realizado el
-											pago.
-										</div>
-										<div th:if="${miembro.churn == true}"
-											class="alert alert-warning mt-3" role="alert">
-											<strong>¡Atención!</strong> Este miembro tiene un alto riesgo
-											de abandono.
-										</div>
-										<div th:if="${miembro.createdDate}"
-											class="alert alert-info mt-3" role="alert">
-											<strong>¡Bienvenido!</strong> Nuevo miembro del gimnasio.
+											<hr>
+											<div class="btn-group" role="group"
+												aria-label="Acciones del Miembro">
+												<form
+													th:action="@{/auth/gymUser/activateDesactivate/{id}(id=${miembro.id})}"
+													method="post">
+													<button type="submit" class="btn btn-success btn-sm">Activar</button>
+												</form>
+												<form th:action="@{/gymUser/delete/{id}(id=${miembro.id})}"
+													method="post">
+													<button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+												</form>
+												<a
+													th:href="@{/gymUser/viewAchievements/{id}(id=${miembro.id})}"
+													class="btn btn-success btn-sm">Ver Logros</a>
+											</div>
+											<div th:if="${miembro.paymentStatus == false}"
+												class="alert alert-danger mt-3" role="alert">
+												<strong>¡Atención!</strong> Este miembro no ha realizado el
+												pago.
+											</div>
+											<div th:if="${miembro.churn == true}"
+												class="alert alert-warning mt-3" role="alert">
+												<strong>¡Atención!</strong> Este miembro tiene un alto
+												riesgo de abandono.
+											</div>
+											<div th:if="${miembro.createdDate}"
+												class="alert alert-info mt-3" role="alert">
+												<strong>¡Bienvenido!</strong> Nuevo miembro del gimnasio.
+											</div>
 										</div>
 									</div>
 								</div>
@@ -232,6 +235,9 @@
 					</div>
 				</div>
 			</div>
+			  <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center" id="pagination"></ul>
+    </nav>
 		</div>
 
 		<div class="container mt-4">

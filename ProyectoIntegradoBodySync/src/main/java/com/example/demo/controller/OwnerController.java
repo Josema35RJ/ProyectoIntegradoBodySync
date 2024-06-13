@@ -91,55 +91,30 @@ public class OwnerController {
 	public String addClass(@ModelAttribute GymClassModel gymClass, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
 		gymClassService.addClass(gymClass);
-	 gymUserService.getGymUserById(gymClass.getInstructor().getId()).getEnrolledClasses().add(gymClass);
+		gymUserService.getGymUserById(gymClass.getInstructor().getId()).getEnrolledClasses().add(gymClass);
 
 		redirectAttributes.addFlashAttribute("message", "Clase creada con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
-	
+
 	@PostMapping("/auth/gymOwner/updateClass")
 	public String editClass(@ModelAttribute GymClassModel updatedClass, BindingResult result,
-	        RedirectAttributes redirectAttributes, HttpServletRequest request) {
-	    System.out.println(updatedClass);
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-	    GymClassModel existingClass = gymClassService.getClassById(updatedClass.getId());
-	    if (existingClass != null) {
-	        existingClass.setName(updatedClass.getName());
-	        existingClass.setDescription(updatedClass.getDescription());
-	        existingClass.setStartDate(updatedClass.getStartDate());
-	        existingClass.setEndDate(updatedClass.getEndDate());
-	        existingClass.setDaysOfWeek(updatedClass.getDaysOfWeek());
-	        existingClass.setTime(updatedClass.getTime());
-	        existingClass.setDuration(updatedClass.getDuration());
-	        existingClass.setMaximumCapacity(updatedClass.getMaximumCapacity());
+		gymClassService.updateClass(updatedClass);
 
-	        // Actualizar el instructor si ha cambiado
-	        if (!existingClass.getInstructor().getId().equals(updatedClass.getInstructor().getId())) {
-	            // Remover la clase de las clases inscritas del instructor anterior
-	            gymUserService.getGymUserById(existingClass.getInstructor().getId()).getEnrolledClasses().remove(existingClass);
-	            
-	            // Actualizar al nuevo instructor
-	            existingClass.setInstructor(updatedClass.getInstructor());
+		redirectAttributes.addFlashAttribute("success", "Clase actualizada con éxito");
 
-	            // Agregar la clase a las clases inscritas del nuevo instructor
-	            gymUserService.getGymUserById(updatedClass.getInstructor().getId()).getEnrolledClasses().add(existingClass);
-	        }
-
-	        gymClassService.updateClass(existingClass);
-
-	        redirectAttributes.addFlashAttribute("success", "Clase actualizada con éxito");
-	    }
-
-	    String referer = request.getHeader("Referer");
-	    return "redirect:" + referer;
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
-	
+
 	@PostMapping("/auth/gymUser/activateDesactivate/{id}")
 	public String activateDesativar(@PathVariable int id, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
-		 gymUserService.activarDesactivar(id);
-		 redirectAttributes.addFlashAttribute("success", "Instructor desactivado con éxito");
+		gymUserService.activarDesactivar(id);
+		redirectAttributes.addFlashAttribute("success", "Instructor desactivado con éxito");
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
@@ -154,13 +129,11 @@ public class OwnerController {
 	@GetMapping("/auth/gymOwner/GestionMiembros")
 	public String GestionMiembros(Model model) {
 		List<GymUserModel> members = gymUserService.ListAllGymUsers();
-
 		// Filtra los miembros activos e inactivos
 		List<GymUserModel> activeMembers = members.stream()
 				.filter(gymUser -> gymUser.isEnabled() && !gymUser.isDeleted()).collect(Collectors.toList());
 		List<GymUserModel> inactiveMembers = members.stream()
 				.filter(gymUser -> !gymUser.isEnabled() && !gymUser.isDeleted()).collect(Collectors.toList());
-
 		// Calcula la edad y el IMC para cada miembro
 		List<Integer> ages = members.stream().map(GymUserModel::getBirthDate).map(gymUserService::calculateAge)
 				.collect(Collectors.toList());
@@ -173,14 +146,9 @@ public class OwnerController {
 			gymUser.setChurn(churnRisk);
 		}
 
-		List<LocalDateTime> createdDates = members.stream().map(GymUserModel::getCreatedDate) // Asegúrate de que
-																								// getCreatedDate es un
-																								// método de
-																								// GymUserModel
+		List<LocalDateTime> createdDates = members.stream().map(GymUserModel::getCreatedDate)
 				.collect(Collectors.toList());
 
-		// Añade los miembros activos e inactivos, las edades, los IMCs y los días desde
-		// la creación al modelo
 		model.addAttribute("activeMembers", activeMembers);
 		model.addAttribute("inactiveMembers", inactiveMembers);
 		model.addAttribute("ages", ages);
@@ -204,19 +172,19 @@ public class OwnerController {
 
 	@GetMapping("/auth/gymUsers/attendanceStats")
 	public ResponseEntity<Map<String, Integer>> getAttendanceStats() {
-	    Map<String, Integer> stats = new HashMap<>();
-	    SimpleDateFormat sdf = new SimpleDateFormat("EEEE", new Locale("es", "ES"));
+		Map<String, Integer> stats = new HashMap<>();
+		SimpleDateFormat sdf = new SimpleDateFormat("EEEE", new Locale("es", "ES"));
 
-	    // Días de la semana.
-	    for (String dia : new String[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }) {
-	        try {
-	            Date fechaDia = sdf.parse(dia);
-	            stats.put(dia, gymUserRepository.countByAttendanceDaysContains(fechaDia));
-	        } catch (ParseException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	    return ResponseEntity.ok(stats);
+		// Días de la semana.
+		for (String dia : new String[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }) {
+			try {
+				Date fechaDia = sdf.parse(dia);
+				stats.put(dia, gymUserRepository.countByAttendanceDaysContains(fechaDia));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return ResponseEntity.ok(stats);
 	}
 
 	@PostMapping("/gymUser/delete/{id}")
@@ -265,48 +233,50 @@ public class OwnerController {
 	@GetMapping("/auth/gymOwner/GestionInstructores")
 	public String GestionInstructores(Model model) {
 
-	    model.addAttribute("ListInstructores", instructorService.getAllInstructors());
-	    System.out.println(instructorService.getAllInstructors());
-	    return GESTIONINSTRUCTORES_VIEW;
+		model.addAttribute("ListInstructores", instructorService.getAllInstructors());
+		System.out.println(instructorService.getAllInstructors());
+		return GESTIONINSTRUCTORES_VIEW;
 	}
 
 	@GetMapping("/auth/gymOwner/ConfiguracionGym")
 	public String ConfiguracionGym() {
-	return CONFIGURACIONGYM_VIEW;
+		return CONFIGURACIONGYM_VIEW;
 	}
 
 	@GetMapping("/auth/gymOwner/instructors")
-	 @ResponseBody
-    public List<GymUserModel> getAllInstructors() {
-        return instructorService.getAllInstructors();
-    }
+	@ResponseBody
+	public List<GymUserModel> getAllInstructors() {
+		return instructorService.getAllInstructors();
+	}
 
 	@GetMapping("/auth/gymOwner/asistencia")
 	public ResponseEntity<List<GymClassModel>> obtenerDatosAsistencia() {
-	    List<GymClassModel> asistenciaData = gymClassService.obtenerDatosAsistencia();
-	    return ResponseEntity.ok(asistenciaData);
+		List<GymClassModel> asistenciaData = gymClassService.obtenerDatosAsistencia();
+		return ResponseEntity.ok(asistenciaData);
 	}
 
 	@GetMapping("/auth/gymOwner/popularidad")
 	public ResponseEntity<List<GymClassModel>> obtenerDatosPopularidad() {
-	    List<GymClassModel> popularidadData = gymClassService.obtenerDatosPopularidad();
-	    return ResponseEntity.ok(popularidadData);
+		List<GymClassModel> popularidadData = gymClassService.obtenerDatosPopularidad();
+		return ResponseEntity.ok(popularidadData);
 	}
 
 	@PostMapping("/auth/gymOwner/instructors/edit")
-	public String editInstructor(@ModelAttribute GymUserModel instructor, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-	    gymUserService.updateUser(instructor);
-	    
-	    // Agregar un mensaje de éxito
-	    redirectAttributes.addFlashAttribute("success", "¡Instructor actualizado exitosamente!");
+	public String editInstructor(@ModelAttribute GymUserModel instructor, RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
+		gymUserService.updateUser(instructor);
 
-	    String referer = request.getHeader("Referer");
-	    return "redirect:" + referer;
+		// Agregar un mensaje de éxito
+		redirectAttributes.addFlashAttribute("success", "¡Instructor actualizado exitosamente!");
+
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@PostMapping("/auth/gymOwner/register")
 	public String registerSubmit(@ModelAttribute("gymUserModel") GymUserModel gymUserModel,
-			@RequestParam("confirmPassword") String confirmPassword, BindingResult result, RedirectAttributes flash, HttpServletRequest request) {
+			@RequestParam("confirmPassword") String confirmPassword, BindingResult result, RedirectAttributes flash,
+			HttpServletRequest request) {
 
 		if (result.hasErrors()) {
 			return GESTIONINSTRUCTORES_VIEW;
@@ -340,23 +310,23 @@ public class OwnerController {
 			gymUserService.registrar(gymUserModel);
 			flash.addFlashAttribute("success", "¡Instructor registrado exitosamente!");
 			String referer = request.getHeader("Referer");
-			
+
 			return "redirect:" + referer;
 		}
 	}
-	
+
 	private boolean isValidEmailAddress(String email) {
 		// Expresión regular para verificar el formato de un correo electrónico
 		String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
 		return email.matches(regex);
 	}
-	
+
 	@GetMapping("/auth/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        // Invalida la sesión actual
-        request.getSession().invalidate();
-        // Redirige a la página de inicio de sesión
-        return "redirect:/auth/login";
-    }
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		// Invalida la sesión actual
+		request.getSession().invalidate();
+		// Redirige a la página de inicio de sesión
+		return "redirect:/auth/login";
+	}
 
 }
